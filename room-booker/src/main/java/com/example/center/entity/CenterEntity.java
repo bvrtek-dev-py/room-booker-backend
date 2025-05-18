@@ -1,4 +1,4 @@
-package com.example.company.entity;
+package com.example.center.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,22 +8,24 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "companies")
-public class CompanyEntity {
+@Table(name = "centers")
+public class CenterEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, unique = true, length=255)
+
+    @Column(nullable = false, unique = true, length = 255)
     private String name;
 
-    protected CompanyEntity() {
-        this.id = null;
-        this.name = null;
-    }
+    @Column(length = 500)
+    private String description;
 
-    public CompanyEntity(Long id, String name) {
+    protected CenterEntity() {}
+
+    public CenterEntity(Long id, String name, String description) {
         this.id = id;
         this.name = name;
+        this.description = description;
     }
 
     public Long getId() {
@@ -32,5 +34,9 @@ public class CompanyEntity {
 
     public String getName() {
         return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }
