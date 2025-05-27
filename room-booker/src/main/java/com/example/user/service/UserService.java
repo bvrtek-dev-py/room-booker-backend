@@ -1,8 +1,10 @@
 package com.example.user.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.common.exception.ObjectAlreadyExistsException;
@@ -24,6 +26,8 @@ public class UserService {
     private UserEntityMapper userEntityMapper;
     @Autowired
     private UserResponseMapper userResponseMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<UserResponse> getAll() {
         return userRepository.findAll().stream()
@@ -34,7 +38,10 @@ public class UserService {
     public UserResponse register(UserCreateRequest request) {
         isUsernameTaken(request.getUsername());
 
-        UserEntity user = userEntityMapper.map(request, UserRole.USER);
+        final String encodedPassword = passwordEncoder.encode(request.getPassword());
+        UserCreateRequest finalRequest = request.with(Optional.of(encodedPassword), Optional.empty(), Optional.empty());
+
+        UserEntity user = userEntityMapper.map(finalRequest, UserRole.USER);
         UserEntity savedUser = userRepository.save(user);
 
         return userResponseMapper.map(savedUser);
