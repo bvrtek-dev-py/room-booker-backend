@@ -1,7 +1,5 @@
 package com.example.auth.authenticator;
 
-import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.auth.dto.JwtPayload;
 import com.example.auth.factory.JwtPayloadFactory;
+import com.example.auth.factory.UsernamePasswordAuthenticationTokenFactory;
 import com.example.user.entity.UserEntity;
 import com.example.user.repository.UserRepository;
 
@@ -24,6 +23,8 @@ public class Authenticator implements AuthenticationProvider {
     private JwtPayloadFactory jwtPayloadFactory;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UsernamePasswordAuthenticationTokenFactory authenticationTokenFactory;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -42,7 +43,7 @@ public class Authenticator implements AuthenticationProvider {
             user.getEmail()
         );
 
-        return new UsernamePasswordAuthenticationToken(jwtPayload, null, new ArrayList<>());
+        return authenticationTokenFactory.make(jwtPayload, null);
     }
 
     @Override

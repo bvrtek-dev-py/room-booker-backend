@@ -1,7 +1,6 @@
 package com.example.auth.filter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.auth.dto.JwtPayload;
+import com.example.auth.factory.UsernamePasswordAuthenticationTokenFactory;
 import com.example.auth.service.AccessTokenService;
 
 import jakarta.servlet.FilterChain;
@@ -22,6 +22,8 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JwtAuthFilter extends OncePerRequestFilter {
     @Autowired
     private AccessTokenService jwtService;
+    @Autowired
+    private UsernamePasswordAuthenticationTokenFactory authenticationTokenFactory;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -46,10 +48,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
        }
 
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(
-                    payload, null, new ArrayList<>()
-                );
+        UsernamePasswordAuthenticationToken authenticationToken = authenticationTokenFactory.make(payload, null);
 
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);

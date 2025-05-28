@@ -25,11 +25,11 @@ public class SecurityConfig {
     @Order(1)
     public SecurityFilterChain publicEndpoints(HttpSecurity http) throws Exception {
         http
-            .securityMatcher("/api/v1/auth/**", "/api/v1/users") // Obsługuje tylko te ścieżki
+            .securityMatcher("/api/v1/auth/**", "/api/v1/users")
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/v1/auth/**").permitAll() // Zezwól na wszystkie żądania do /api/v1/auth/**
-                .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll() // Zezwól tylko na POST do /api/v1/users
+                .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
             );
         return http.build();
     }
@@ -38,12 +38,12 @@ public class SecurityConfig {
     @Order(2)
     public SecurityFilterChain securedEndpoints(HttpSecurity http) throws Exception {
         http
-            .securityMatcher("/**") // Obsługuje wszystkie inne żądania
+            .securityMatcher("/**")
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().authenticated() // Wymaga uwierzytelnienia dla wszystkich innych żądań
+                .anyRequest().authenticated()
             )
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // Dodaj filtr JWT
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
@@ -53,9 +53,4 @@ public class SecurityConfig {
                 .authenticationProvider(authenticator)
                 .build();
     }
-
-    // @Bean
-    // public AuthenticationProvider authenticationProvider() {
-    //     return authenticator;
-    // }
 }
