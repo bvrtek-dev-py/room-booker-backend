@@ -5,14 +5,20 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.auth.dto.JwtPayload;
 import com.example.common.exception.ObjectAlreadyExistsException;
 import com.example.common.exception.ObjectNotFoundException;
-import com.example.company.dto.CompanyCreateRequest;
-import com.example.company.dto.CompanyUpdateRequest;
+import com.example.common.exception.PermissionDeniedException;
+import com.example.company.dto.request.CompanyCreateRequest;
+import com.example.company.dto.request.CompanyUpdateRequest;
+import com.example.company.dto.response.CompanyResponse;
 import com.example.company.entity.CompanyEntity;
 import com.example.company.factory.CompanyEntityFactory;
 import com.example.company.mapper.CompanyEntityMapper;
+import com.example.company.mapper.CompanyResponseMapperFacade;
 import com.example.company.repository.CompanyRepository;
+import com.example.user.entity.UserEntity;
+import com.example.user.use_case.UserGetById;
 
 @Service
 public class CompanyService {
@@ -22,40 +28,69 @@ public class CompanyService {
     private CompanyEntityFactory companyModelFactory;
     @Autowired
     private CompanyEntityMapper companyModelMapper;
+    @Autowired
+    private UserGetById userGetById;
+    @Autowired
+    private CompanyResponseMapperFacade companyResponseMapper;
 
-    public List<CompanyEntity> getAllCompanies() {
-        return companyRepository.findAll();
+    public List<CompanyResponse> getAllCompanies() {
+        return companyRepository.findAll().stream()
+                .map(companyResponseMapper::map)
+                .toList();
     }
 
-    public CompanyEntity getById(Long id) {
-        return companyRepository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException());
+    public CompanyResponse getById(Long id) {
+        CompanyEntity entity = getEntityById(id);
+
+        return companyResponseMapper.map(entity);
     }
 
-    public CompanyEntity create(CompanyCreateRequest company) {
-        CompanyEntity entity = companyModelMapper.toEntity(company);
+    public CompanyResponse create(CompanyCreateRequest company, JwtPayload user) {
+        UserEntity userEntity = userGetById.execute(user.getId());
+        CompanyEntity entity = companyModelMapper.map(company, userEntity);
 
         this.existsByName(entity.getName());
         
-        return companyRepository.save(entity);
+        CompanyEntity savedEntity = companyRepository.save(entity);
+
+        return companyResponseMapper.map(savedEntity);
     }
 
-    public CompanyEntity update(Long id, CompanyUpdateRequest request) {
+    public CompanyResponse update(Long id, CompanyUpdateRequest request, JwtPayload user) {
         this.existsByName(request.name());
 
-        return companyRepository.findById(id).map(company -> {
-            company = companyModelFactory.make(company.getId(), request.name());
-            return companyRepository.save(company);
-        }).orElseThrow(() -> new ObjectNotFoundException());
+        UserEntity userEntity = userGetById.execute(user.getId());
+        CompanyEntity existingCompany = getEntityById(id);
+
+        if (!existingCompany.getUser().getId().equals(userEntity.getId())) {
+            throw new PermissionDeniedException();
+        }
+
+        CompanyEntity companyToUpdate = companyModelFactory.make(existingCompany.getId(), request.name(), userEntity);
+        CompanyEntity savedCompany = companyRepository.save(companyToUpdate);
+
+        return companyResponseMapper.map(savedCompany);
     }
 
-    public void delete(Long id) {
+    public void delete(Long id, JwtPayload user) {
+        CompanyEntity entity = companyRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException());
+
+        if (!entity.getUser().getId().equals(user.getId())) {
+            throw new PermissionDeniedException();
+        }
+
         companyRepository.deleteById(id);
     }
 
-    private void  existsByName(String name) {
+    private void existsByName(String name) {
         if (companyRepository.existsByName(name)) {
             throw new ObjectAlreadyExistsException();
         }
+    }
+
+    private CompanyEntity getEntityById(Long id) {
+        return companyRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException());
     }
 }
