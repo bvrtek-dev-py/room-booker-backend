@@ -14,8 +14,8 @@ import com.example.center.entity.CenterEntity;
 import com.example.center.mapper.CenterEntityMapper;
 import com.example.center.mapper.CenterResponseMapperFacade;
 import com.example.center.repository.CenterRepository;
+import com.example.center.use_case.CenterGetById;
 import com.example.common.exception.ObjectAlreadyExistsException;
-import com.example.common.exception.ObjectNotFoundException;
 import com.example.common.exception.PermissionDeniedException;
 import com.example.company.entity.CompanyEntity;
 import com.example.company.use_case.CompanyGetById;
@@ -33,6 +33,8 @@ public class CenterService {
     private CompanyGetIfUserIsOwner companyGetIfUserIsOwner;
     @Autowired
     private CompanyGetById companyGetById;
+    @Autowired
+    private CenterGetById centerGetById;
 
     public CenterResponse create(CenterCreateRequest request, Long companyId, JwtPayload user) {
         CompanyEntity company = companyGetIfUserIsOwner.execute(companyId, user.getId());
@@ -46,7 +48,7 @@ public class CenterService {
     }
 
     public CenterResponse update(Long id, CenterUpdateRequest request, Long userId) {
-        CenterEntity existingEntity = getEntityById(id);
+        CenterEntity existingEntity = centerGetById.execute(id);
         
         throwIfNotCompanyOwner(existingEntity, userId);
         this.existsByName(request.name());
@@ -66,11 +68,11 @@ public class CenterService {
     }
 
     public CenterResponse getById(Long id) {
-        return centerResponseMapper.map(getEntityById(id));
+        return centerResponseMapper.map(centerGetById.execute(id));
     }
 
     public void delete(Long id, Long userId) {
-        CenterEntity entity = getEntityById(id);
+        CenterEntity entity = centerGetById.execute(id);
 
         throwIfNotCompanyOwner(entity, userId);
 
@@ -81,11 +83,6 @@ public class CenterService {
         if (centerRepository.existsByName(name)) {
             throw new ObjectAlreadyExistsException();
         }
-    }
-
-    private CenterEntity getEntityById(Long id) {
-        return centerRepository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException());
     }
 
     private void throwIfNotCompanyOwner(CenterEntity entity, Long userId) {
