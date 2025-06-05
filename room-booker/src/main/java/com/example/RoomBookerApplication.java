@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.example"})
 public class RoomBookerApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(RoomBookerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(RoomBookerApplication.class, args);
+    }
 }

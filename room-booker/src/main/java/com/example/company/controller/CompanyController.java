@@ -38,26 +38,20 @@ public class CompanyController {
 
     @PostMapping
     public ResponseEntity<CompanyResponse> create(
-        @RequestBody CompanyCreateRequest request,
-        @AuthenticationPrincipal JwtPayload user
-    ) {
+            @RequestBody CompanyCreateRequest request, @AuthenticationPrincipal JwtPayload user) {
         return ResponseEntity.ok(companyService.create(request, user));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CompanyResponse> update(
-        @PathVariable Long id,
-        @RequestBody CompanyUpdateRequest request,
-        @AuthenticationPrincipal JwtPayload user
-    ) {
+            @PathVariable Long id,
+            @RequestBody CompanyUpdateRequest request,
+            @AuthenticationPrincipal JwtPayload user) {
         return ResponseEntity.ok(companyService.update(id, request, user));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCompany(
-        @PathVariable Long id,
-        @AuthenticationPrincipal JwtPayload user
-    ) {
+    public ResponseEntity<Void> deleteCompany(@PathVariable Long id, @AuthenticationPrincipal JwtPayload user) {
         companyService.delete(id, user);
         return ResponseEntity.noContent().build();
     }

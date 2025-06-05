@@ -24,18 +24,17 @@ import com.example.common.exception.PermissionDeniedException;
 public class ApartmentService {
     @Autowired
     private ApartmentRepository apartmentRepository;
+
     @Autowired
     private ApartmentEntityMapper apartmentEntityMapper;
+
     @Autowired
     private CenterGetIfBelongsToUser centerGetIfBelongsToUser;
+
     @Autowired
     private ApartmentResponseMapperFacade apartmentResponseMapperFacade;
 
-    public ApartmentResponse create(
-        ApartmentCreateRequest request,
-        Long centerId,
-        JwtPayload jwtPayload
-    ) {
+    public ApartmentResponse create(ApartmentCreateRequest request, Long centerId, JwtPayload jwtPayload) {
         CenterEntity center = centerGetIfBelongsToUser.execute(centerId, jwtPayload.getId());
 
         ApartmentEntity apartment = apartmentEntityMapper.map(request, center);
@@ -44,23 +43,18 @@ public class ApartmentService {
         return apartmentResponseMapperFacade.map(savedApartment);
     }
 
-    public ApartmentResponse update(
-        Long id, 
-        ApartmentUpdateRequest request,
-        Long userId
-    ) {
+    public ApartmentResponse update(Long id, ApartmentUpdateRequest request, Long userId) {
         ApartmentEntity existingApartment = getEntityById(id);
         throwIfNotApartmentOwner(existingApartment, userId);
 
         ApartmentEntity apartment = existingApartment.with(
-            Optional.of(request.getName()),
-            Optional.of(request.getNumberOfPeople()),
-            Optional.of(request.getDescription()),
-            Optional.of(request.getPricePerNight()),
-            Optional.of(request.getAmount()),
-            Optional.ofNullable(request.getFacilities()),
-            Optional.empty()
-        );
+                Optional.of(request.getName()),
+                Optional.of(request.getNumberOfPeople()),
+                Optional.of(request.getDescription()),
+                Optional.of(request.getPricePerNight()),
+                Optional.of(request.getAmount()),
+                Optional.ofNullable(request.getFacilities()),
+                Optional.empty());
         ApartmentEntity updatedApartment = apartmentRepository.save(apartment);
 
         return apartmentResponseMapperFacade.map(updatedApartment);
@@ -81,16 +75,13 @@ public class ApartmentService {
     }
 
     public void delete(Long id, Long userId) {
-        centerGetIfBelongsToUser.execute(
-            getEntityById(id).getCenter().getId(), userId
-        );
+        centerGetIfBelongsToUser.execute(getEntityById(id).getCenter().getId(), userId);
 
         apartmentRepository.deleteById(id);
     }
 
     private ApartmentEntity getEntityById(Long id) {
-        return apartmentRepository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException());
+        return apartmentRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException());
     }
 
     private void throwIfNotApartmentOwner(ApartmentEntity apartment, Long userId) {

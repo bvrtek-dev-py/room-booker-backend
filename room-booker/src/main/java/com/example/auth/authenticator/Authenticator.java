@@ -19,10 +19,13 @@ import com.example.user.repository.UserRepository;
 public class Authenticator implements AuthenticationProvider {
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private JwtPayloadFactory jwtPayloadFactory;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Autowired
     private UsernamePasswordAuthenticationTokenFactory authenticationTokenFactory;
 
@@ -31,17 +34,15 @@ public class Authenticator implements AuthenticationProvider {
         String email = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        UserEntity user = userRepository.findByEmail(email)
+        UserEntity user = userRepository
+                .findByEmail(email)
                 .orElseThrow(() -> new BadCredentialsException("Invalid email or password"));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("Invalid email or password");
         }
 
-        JwtPayload jwtPayload = jwtPayloadFactory.make(
-            user.getId(),
-            user.getEmail()
-        );
+        JwtPayload jwtPayload = jwtPayloadFactory.make(user.getId(), user.getEmail());
 
         return authenticationTokenFactory.make(jwtPayload, null);
     }

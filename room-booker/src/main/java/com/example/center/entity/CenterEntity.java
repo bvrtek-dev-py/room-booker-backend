@@ -2,8 +2,6 @@ package com.example.center.entity;
 
 import java.util.Optional;
 
-import com.example.company.entity.CompanyEntity;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,16 +11,21 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import com.example.company.entity.CompanyEntity;
+
 @Entity
 @Table(name = "centers")
 public class CenterEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false, unique = true, length = 255)
     private String name;
+
     @Column(length = 500)
     private String description;
+
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
     private CompanyEntity company;
@@ -52,14 +55,15 @@ public class CenterEntity {
         return company;
     }
 
-    public CenterEntity with(Optional<String> newName, Optional<String> newDescription, Optional<CompanyEntity> company)  {
+    public CenterEntity with(
+            Optional<String> newName, Optional<String> newDescription, Optional<CompanyEntity> company) {
         CenterEntity newCenter = new CenterEntity();
-    
+
         newCenter.id = this.id;
         newCenter.name = newName.orElse(this.name);
         newCenter.description = newDescription.orElse(this.description);
         newCenter.company = company.orElse(this.company);
-        
+
         return newCenter;
     }
 }

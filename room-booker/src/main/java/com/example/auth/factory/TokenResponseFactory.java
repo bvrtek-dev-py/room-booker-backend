@@ -9,11 +9,6 @@ import com.example.auth.dto.TokenResponse;
 @Component
 public class TokenResponseFactory {
     public TokenResponse create(String accessToken, String refreshToken, String tokenType, Date expiredAt) {
-        return new TokenResponse(
-            tokenType,
-            expiredAt,
-            refreshToken,
-            accessToken
-        );
+        return new TokenResponse(tokenType, expiredAt, refreshToken, accessToken);
     }
 }

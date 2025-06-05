@@ -11,7 +11,7 @@ public class UserCreateRequest extends UserBaseRequest {
 
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
-    protected  String email;
+    protected String email;
 
     public String getPassword() {
         return password;

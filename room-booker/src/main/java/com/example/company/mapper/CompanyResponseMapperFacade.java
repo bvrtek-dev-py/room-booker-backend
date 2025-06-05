@@ -11,6 +11,7 @@ import com.example.user.mapper.UserResponseMapper;
 public class CompanyResponseMapperFacade {
     @Autowired
     private CompanyResponseMapper companyResponseMapper;
+
     @Autowired
     private UserResponseMapper userResponseMapper;
 

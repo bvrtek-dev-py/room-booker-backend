@@ -30,21 +30,15 @@ public class CenterController {
 
     @PutMapping("/{id}")
     public ResponseEntity<CenterResponse> update(
-        @PathVariable Long id, 
-        @RequestBody CenterUpdateRequest request,
-        @AuthenticationPrincipal JwtPayload user
-    ) {
+            @PathVariable Long id, @RequestBody CenterUpdateRequest request, @AuthenticationPrincipal JwtPayload user) {
         CenterResponse response = centerService.update(id, request, user.getId());
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(
-        @PathVariable Long id,
-        @AuthenticationPrincipal JwtPayload user
-    ) {
+    public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal JwtPayload user) {
         centerService.delete(id, user.getId());
-        
+
         return ResponseEntity.noContent().build();
     }
 }

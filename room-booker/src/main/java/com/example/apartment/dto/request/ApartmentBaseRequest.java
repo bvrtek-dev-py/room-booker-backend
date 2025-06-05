@@ -2,10 +2,10 @@ package com.example.apartment.dto.request;
 
 import java.util.List;
 
-import com.example.apartment.type.Facility;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
+import com.example.apartment.type.Facility;
 
 public class ApartmentBaseRequest {
     @NotBlank(message = "Apartment name is required")

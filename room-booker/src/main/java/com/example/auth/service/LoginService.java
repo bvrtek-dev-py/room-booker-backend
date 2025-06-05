@@ -16,33 +16,29 @@ public class LoginService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
     @Autowired
     private AccessTokenService accessTokenService;
+
     @Autowired
     private RefreshTokenService refreshTokenService;
+
     @Autowired
     private TokenResponseFactory tokenResponseFactory;
 
     public TokenResponse login(String email, String password) {
-        Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(email, password)
-        );
+        Authentication authentication =
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 
         JwtPayload userDetails = (JwtPayload) authentication.getPrincipal();
         long currentTimeMillis = System.currentTimeMillis();
 
-        String accessToken = accessTokenService.generate(
-            userDetails.getEmail(), userDetails.getId(), currentTimeMillis
-        );
-        String refreshToken = refreshTokenService.generate(
-            userDetails.getEmail(), userDetails.getId(), currentTimeMillis
-        );
+        String accessToken =
+                accessTokenService.generate(userDetails.getEmail(), userDetails.getId(), currentTimeMillis);
+        String refreshToken =
+                refreshTokenService.generate(userDetails.getEmail(), userDetails.getId(), currentTimeMillis);
 
         return tokenResponseFactory.create(
-            accessToken,
-            refreshToken,
-            BEARER,
-            accessTokenService.getExpirationDate(accessToken)
-        );    
+                accessToken, refreshToken, BEARER, accessTokenService.getExpirationDate(accessToken));
     }
 }

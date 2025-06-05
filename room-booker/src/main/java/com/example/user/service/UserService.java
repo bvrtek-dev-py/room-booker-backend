@@ -22,17 +22,18 @@ import com.example.user.role.UserRole;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private UserEntityMapper userEntityMapper;
+
     @Autowired
     private UserResponseMapper userResponseMapper;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     public List<UserResponse> getAll() {
-        return userRepository.findAll().stream()
-                .map(userResponseMapper::map)
-                .toList();
+        return userRepository.findAll().stream().map(userResponseMapper::map).toList();
     }
 
     public UserResponse register(UserCreateRequest request) {
@@ -52,9 +53,8 @@ public class UserService {
     }
 
     public UserResponse update(Long id, UserUpdateRequest request) {
-        UserEntity user = userRepository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException());
-        
+        UserEntity user = userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException());
+
         UserEntity mappedUser = userEntityMapper.map(request, user);
         UserEntity updatedUser = userRepository.save(mappedUser);
 

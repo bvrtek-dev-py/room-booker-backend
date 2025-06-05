@@ -13,11 +13,11 @@ public class CenterGetIfBelongsToUser {
 
     public CenterEntity execute(Long id, Long userId) {
         CenterEntity center = centerGetById.execute(id);
-        
+
         if (!center.getCompany().getUser().getId().equals(userId)) {
             throw new PermissionDeniedException();
         }
-        
+
         return center;
     }
 }

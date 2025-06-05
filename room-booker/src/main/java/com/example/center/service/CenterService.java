@@ -25,20 +25,25 @@ import com.example.company.use_case.CompanyGetIfUserIsOwner;
 public class CenterService {
     @Autowired
     private CenterRepository centerRepository;
+
     @Autowired
     private CenterEntityMapper centerEntityMapper;
+
     @Autowired
     private CenterResponseMapperFacade centerResponseMapper;
+
     @Autowired
     private CompanyGetIfUserIsOwner companyGetIfUserIsOwner;
+
     @Autowired
     private CompanyGetById companyGetById;
+
     @Autowired
     private CenterGetById centerGetById;
 
     public CenterResponse create(CenterCreateRequest request, Long companyId, JwtPayload user) {
         CompanyEntity company = companyGetIfUserIsOwner.execute(companyId, user.getId());
-        
+
         this.existsByName(request.name());
 
         CenterEntity entity = centerEntityMapper.map(request, company);
@@ -49,13 +54,12 @@ public class CenterService {
 
     public CenterResponse update(Long id, CenterUpdateRequest request, Long userId) {
         CenterEntity existingEntity = centerGetById.execute(id);
-        
+
         throwIfNotCompanyOwner(existingEntity, userId);
         this.existsByName(request.name());
 
-        CenterEntity entity = existingEntity.with(
-            Optional.of(request.name()), Optional.of(request.description()), Optional.empty()
-        );
+        CenterEntity entity =
+                existingEntity.with(Optional.of(request.name()), Optional.of(request.description()), Optional.empty());
         CenterEntity persistedEntity = centerRepository.save(entity);
 
         return centerResponseMapper.map(persistedEntity);
