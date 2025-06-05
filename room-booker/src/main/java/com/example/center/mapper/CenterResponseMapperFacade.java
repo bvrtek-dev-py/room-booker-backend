@@ -11,6 +11,7 @@ import com.example.company.mapper.CompanyResponseMapperFacade;
 public class CenterResponseMapperFacade {
     @Autowired
     private CenterResponseMapper centerResponseMapper;
+
     @Autowired
     private CompanyResponseMapperFacade companyResponseMapperFacade;
 

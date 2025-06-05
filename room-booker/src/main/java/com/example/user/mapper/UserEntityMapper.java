@@ -15,10 +15,10 @@ public interface UserEntityMapper {
     @Mapping(target = "role", source = "role")
     UserEntity map(UserCreateRequest request, UserRole role);
 
-    @Mapping(target = "id", source= "userEntity.id")
-    @Mapping(target = "username", source= "request.username")
-    @Mapping(target = "email", source= "userEntity.email")
-    @Mapping(target = "role", source= "userEntity.role")
-    @Mapping(target = "password", source= "userEntity.password")
+    @Mapping(target = "id", source = "userEntity.id")
+    @Mapping(target = "username", source = "request.username")
+    @Mapping(target = "email", source = "userEntity.email")
+    @Mapping(target = "role", source = "userEntity.role")
+    @Mapping(target = "password", source = "userEntity.password")
     UserEntity map(UserUpdateRequest request, UserEntity userEntity);
 }

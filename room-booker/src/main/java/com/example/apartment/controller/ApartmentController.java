@@ -29,18 +29,14 @@ public class ApartmentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ApartmentResponse> update(
-        @PathVariable Long id, 
-        @RequestBody ApartmentUpdateRequest apartment,
-        @AuthenticationPrincipal JwtPayload userPayload
-    ) {
+            @PathVariable Long id,
+            @RequestBody ApartmentUpdateRequest apartment,
+            @AuthenticationPrincipal JwtPayload userPayload) {
         return ResponseEntity.ok(apartmentService.update(id, apartment, userPayload.getId()));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(
-        @PathVariable Long id,
-        @AuthenticationPrincipal JwtPayload userPayload
-    ) {
+    public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal JwtPayload userPayload) {
         apartmentService.delete(id, userPayload.getId());
         return ResponseEntity.noContent().build();
     }

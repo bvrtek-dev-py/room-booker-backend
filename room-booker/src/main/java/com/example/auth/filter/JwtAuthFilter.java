@@ -2,6 +2,11 @@ package com.example.auth.filter;
 
 import java.io.IOException;
 
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,15 +18,11 @@ import com.example.auth.dto.JwtPayload;
 import com.example.auth.factory.UsernamePasswordAuthenticationTokenFactory;
 import com.example.auth.service.AccessTokenService;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
     @Autowired
     private AccessTokenService jwtService;
+
     @Autowired
     private UsernamePasswordAuthenticationTokenFactory authenticationTokenFactory;
 
@@ -46,7 +47,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (!jwtService.isTokenValid(token)) {
             chain.doFilter(request, response);
             return;
-       }
+        }
 
         UsernamePasswordAuthenticationToken authenticationToken = authenticationTokenFactory.make(payload, null);
 

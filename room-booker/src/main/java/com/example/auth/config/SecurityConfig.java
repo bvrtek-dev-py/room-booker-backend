@@ -18,32 +18,29 @@ import com.example.auth.filter.JwtAuthFilter;
 public class SecurityConfig {
     @Autowired
     private JwtAuthFilter jwtAuthFilter;
+
     @Autowired
     private Authenticator authenticator;
 
     @Bean
     @Order(1)
     public SecurityFilterChain publicEndpoints(HttpSecurity http) throws Exception {
-        http
-            .securityMatcher("/api/v1/auth/**", "/api/v1/users")
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/v1/auth/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
-            );
+        http.securityMatcher("/api/v1/auth/**", "/api/v1/users")
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/auth/**")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users")
+                        .permitAll());
         return http.build();
     }
 
     @Bean
     @Order(2)
     public SecurityFilterChain securedEndpoints(HttpSecurity http) throws Exception {
-        http
-            .securityMatcher("/**")
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .anyRequest().authenticated()
-            )
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        http.securityMatcher("/**")
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

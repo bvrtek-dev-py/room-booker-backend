@@ -11,6 +11,6 @@ import com.example.company.entity.CompanyEntity;
 public interface CenterEntityMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "name", source = "request.name")
-    @Mapping(target = "company", source= "company")
+    @Mapping(target = "company", source = "company")
     CenterEntity map(CenterCreateRequest request, CompanyEntity company);
 }

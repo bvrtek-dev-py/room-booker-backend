@@ -11,5 +11,6 @@ import com.example.company.entity.CompanyEntity;
 @Repository
 public interface CenterRepository extends JpaRepository<CenterEntity, Long> {
     boolean existsByName(String name);
+
     List<CenterEntity> findByCompany(CompanyEntity company);
 }

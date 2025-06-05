@@ -25,20 +25,15 @@ public class CenterApartmentController {
 
     @PostMapping
     public ResponseEntity<ApartmentResponse> create(
-        @RequestBody ApartmentCreateRequest apartment,
-        @PathVariable("id") Long centerId,
-        @AuthenticationPrincipal JwtPayload jwtPayload
-    ) {
-        return ResponseEntity.ok(apartmentService.create(
-            apartment, centerId, jwtPayload
-        ));
+            @RequestBody ApartmentCreateRequest apartment,
+            @PathVariable("id") Long centerId,
+            @AuthenticationPrincipal JwtPayload jwtPayload) {
+        return ResponseEntity.ok(apartmentService.create(apartment, centerId, jwtPayload));
     }
 
     @GetMapping
     public ResponseEntity<List<ApartmentResponse>> getByCenterId(
-        @PathVariable("id") Long centerId,
-        @AuthenticationPrincipal JwtPayload jwtPayload
-    ) {
+            @PathVariable("id") Long centerId, @AuthenticationPrincipal JwtPayload jwtPayload) {
         return ResponseEntity.ok(apartmentService.getByCenterId(centerId, jwtPayload.getId()));
     }
 }

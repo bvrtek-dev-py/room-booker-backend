@@ -9,6 +9,7 @@ import io.jsonwebtoken.security.Keys;
 
 public abstract class TokenService {
     protected abstract byte[] getSecretKeyBytes();
+
     protected abstract long getExpirationTime();
 
     public String generate(String email, Long id, long currentTimeMillis) {

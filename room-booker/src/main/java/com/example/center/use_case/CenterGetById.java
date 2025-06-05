@@ -13,7 +13,6 @@ public class CenterGetById {
     private CenterRepository centerRepository;
 
     public CenterEntity execute(Long id) {
-        return centerRepository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException());
+        return centerRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException());
     }
 }

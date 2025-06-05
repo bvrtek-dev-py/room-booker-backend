@@ -24,12 +24,16 @@ import com.example.user.use_case.UserGetById;
 public class CompanyService {
     @Autowired
     private CompanyRepository companyRepository;
+
     @Autowired
     private CompanyEntityFactory companyModelFactory;
+
     @Autowired
     private CompanyEntityMapper companyModelMapper;
+
     @Autowired
     private UserGetById userGetById;
+
     @Autowired
     private CompanyResponseMapperFacade companyResponseMapper;
 
@@ -50,7 +54,7 @@ public class CompanyService {
         CompanyEntity entity = companyModelMapper.map(company, userEntity);
 
         this.existsByName(entity.getName());
-        
+
         CompanyEntity savedEntity = companyRepository.save(entity);
 
         return companyResponseMapper.map(savedEntity);
@@ -73,8 +77,7 @@ public class CompanyService {
     }
 
     public void delete(Long id, JwtPayload user) {
-        CompanyEntity entity = companyRepository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException());
+        CompanyEntity entity = companyRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException());
 
         if (!entity.getUser().getId().equals(user.getId())) {
             throw new PermissionDeniedException();
@@ -90,7 +93,6 @@ public class CompanyService {
     }
 
     private CompanyEntity getEntityById(Long id) {
-        return companyRepository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException());
+        return companyRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException());
     }
 }

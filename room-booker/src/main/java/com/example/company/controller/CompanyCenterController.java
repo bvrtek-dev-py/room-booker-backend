@@ -25,10 +25,7 @@ public class CompanyCenterController {
 
     @PostMapping
     public ResponseEntity<CenterResponse> create(
-        @RequestBody CenterCreateRequest center,
-        @PathVariable Long id,
-        @AuthenticationPrincipal JwtPayload user
-    ) {
+            @RequestBody CenterCreateRequest center, @PathVariable Long id, @AuthenticationPrincipal JwtPayload user) {
         CenterResponse response = centerService.create(center, id, user);
         return ResponseEntity.ok(response);
     }

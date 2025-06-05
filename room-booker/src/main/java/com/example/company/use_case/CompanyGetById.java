@@ -13,7 +13,6 @@ public class CompanyGetById {
     private CompanyRepository companyRepository;
 
     public CompanyEntity execute(Long id) {
-        return companyRepository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException());
+        return companyRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException());
     }
 }

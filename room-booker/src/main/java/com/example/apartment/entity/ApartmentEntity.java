@@ -3,9 +3,6 @@ package com.example.apartment.entity;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.apartment.type.Facility;
-import com.example.center.entity.CenterEntity;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -17,31 +14,49 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+import com.example.apartment.type.Facility;
+import com.example.center.entity.CenterEntity;
+
 @Entity
 public class ApartmentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false, length = 255)
     private String name;
+
     @Column(nullable = false)
     private int numberOfPeople;
+
     @Column(nullable = false, length = 500)
     private String description;
+
     @Column(nullable = false)
     private double pricePerNight;
+
     @Column(nullable = false)
     private int amount;
+
     @ElementCollection
     @Enumerated(EnumType.STRING)
     private List<Facility> facilities;
+
     @ManyToOne
     @JoinColumn(name = "center_id", nullable = false)
     private CenterEntity center;
 
     protected ApartmentEntity() {}
 
-    public ApartmentEntity(Long id, String name, int numberOfPeople, String description, double pricePerNight, int amount, List<Facility> facilities, CenterEntity center) {
+    public ApartmentEntity(
+            Long id,
+            String name,
+            int numberOfPeople,
+            String description,
+            double pricePerNight,
+            int amount,
+            List<Facility> facilities,
+            CenterEntity center) {
         this.id = id;
         this.name = name;
         this.numberOfPeople = numberOfPeople;
@@ -84,7 +99,14 @@ public class ApartmentEntity {
         return center;
     }
 
-    public ApartmentEntity with(Optional<String> newName, Optional<Integer> newNumberOfPeople, Optional<String> newDescription, Optional<Double> newPricePerNight, Optional<Integer> newAmount, Optional<List<Facility>> newFacilities, Optional<CenterEntity> newCenter) {
+    public ApartmentEntity with(
+            Optional<String> newName,
+            Optional<Integer> newNumberOfPeople,
+            Optional<String> newDescription,
+            Optional<Double> newPricePerNight,
+            Optional<Integer> newAmount,
+            Optional<List<Facility>> newFacilities,
+            Optional<CenterEntity> newCenter) {
         ApartmentEntity newApartment = new ApartmentEntity();
 
         newApartment.id = this.id;

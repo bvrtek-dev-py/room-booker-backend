@@ -13,7 +13,6 @@ public class UserGetById {
     private UserRepository userRepository;
 
     public UserEntity execute(Long id) {
-        return userRepository.findById(id)
-            .orElseThrow(() -> new ObjectNotFoundException());
+        return userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException());
     }
 }
