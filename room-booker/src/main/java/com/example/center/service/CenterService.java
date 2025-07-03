@@ -44,7 +44,7 @@ public class CenterService {
     public CenterResponse create(CenterCreateRequest request, Long companyId, JwtPayload user) {
         CompanyEntity company = companyGetIfUserIsOwner.execute(companyId, user.getId());
 
-        this.existsByName(request.name());
+        this.existsByName(request.getName());
 
         CenterEntity entity = centerEntityMapper.map(request, company);
         CenterEntity persistedEntity = centerRepository.save(entity);

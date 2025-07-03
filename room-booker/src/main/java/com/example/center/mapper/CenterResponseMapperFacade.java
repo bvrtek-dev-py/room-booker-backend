@@ -16,6 +16,6 @@ public class CenterResponseMapperFacade {
     private CompanyResponseMapperFacade companyResponseMapperFacade;
 
     public CenterResponse map(CenterEntity entity) {
-        return centerResponseMapper.map(entity, companyResponseMapperFacade.map(entity.getCompany()));
+        return centerResponseMapper.map(entity, companyResponseMapperFacade.map(entity.getCompany(), null));
     }
 }
