@@ -2,29 +2,29 @@ package com.example.apartment.dto.request;
 
 import java.util.List;
 
+import com.example.apartment.type.Facility;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import com.example.apartment.type.Facility;
-
 public class ApartmentBaseRequest {
     @NotBlank(message = "Apartment name is required")
-    protected String name;
+    private String name;
 
     @NotNull(message = "Number of people is required")
-    protected int numberOfPeople;
+    private int numberOfPeople;
 
     @NotBlank(message = "Description is required")
-    protected String description;
+    private String description;
 
     @NotNull(message = "Price per night is required")
-    protected double pricePerNight;
+    private double pricePerNight;
 
     @NotNull(message = "Amount is required")
-    protected int amount;
+    private int amount;
 
     @NotNull(message = "Facilities are required")
-    protected List<Facility> facilities;
+    private List<Facility> facilities;
 
     public String getName() {
         return name;

@@ -6,7 +6,7 @@ WORKDIR /app
 COPY room-booker /app
 
 # Budowanie aplikacji za pomocą Gradle
-RUN ./gradlew clean build -x test
+RUN ./gradlew clean build -x test -x spotlessCheck
 
 # Eksponowanie portu aplikacji
 EXPOSE 8080

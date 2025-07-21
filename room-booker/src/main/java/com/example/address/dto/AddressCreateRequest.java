@@ -1,6 +1,9 @@
 package com.example.address.dto;
 
+import com.example.address.type.ReferenceType;
+
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class AddressCreateRequest {
@@ -18,11 +21,14 @@ public class AddressCreateRequest {
 
     @NotBlank(message = "Postal code is required")
     @Size(max = 20, message = "Postal code must not exceed 20 characters")
-    private String postalCode;
+    private String zipCode;
 
     @NotBlank(message = "Country is required")
     @Size(max = 50, message = "Country must not exceed 50 characters")
     private String country;
+
+    @NotNull(message = "Reference type is required")
+    private ReferenceType referenceType;
 
     public String getStreet() {
         return street;
@@ -36,11 +42,15 @@ public class AddressCreateRequest {
         return state;
     }
 
-    public String getPostalCode() {
-        return postalCode;
+    public String getZipCode() {
+        return zipCode;
     }
 
     public String getCountry() {
         return country;
+    }
+
+    public ReferenceType getReferenceType() {
+        return referenceType;
     }
 }
