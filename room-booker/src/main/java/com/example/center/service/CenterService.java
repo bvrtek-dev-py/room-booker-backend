@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.address.entity.AddressEntity;
+import com.example.address.use_case.AddressCreate;
 import com.example.auth.dto.JwtPayload;
 import com.example.center.dto.request.CenterCreateRequest;
 import com.example.center.dto.request.CenterUpdateRequest;
@@ -13,6 +15,7 @@ import com.example.center.dto.response.CenterResponse;
 import com.example.center.entity.CenterEntity;
 import com.example.center.mapper.CenterEntityMapper;
 import com.example.center.mapper.CenterResponseMapperFacade;
+import com.example.center.repository.CenterAddressRepository;
 import com.example.center.repository.CenterRepository;
 import com.example.center.use_case.CenterGetById;
 import com.example.common.exception.ObjectAlreadyExistsException;
@@ -41,6 +44,12 @@ public class CenterService {
     @Autowired
     private CenterGetById centerGetById;
 
+    @Autowired
+    private AddressCreate addressCreate;
+
+    @Autowired
+    private CenterAddressRepository centerAddressRepository;
+
     public CenterResponse create(CenterCreateRequest request, Long companyId, JwtPayload user) {
         CompanyEntity company = companyGetIfUserIsOwner.execute(companyId, user.getId());
 
@@ -48,6 +57,11 @@ public class CenterService {
 
         CenterEntity entity = centerEntityMapper.map(request, company);
         CenterEntity persistedEntity = centerRepository.save(entity);
+
+        AddressEntity address = null;
+        if (request.getAddress() != null) {
+            address = addressCreate.execute(request.getAddress(), persistedEntity.getId());
+        }
 
         return centerResponseMapper.map(persistedEntity);
     }
@@ -61,6 +75,12 @@ public class CenterService {
         CenterEntity entity =
                 existingEntity.with(Optional.of(request.name()), Optional.of(request.description()), Optional.empty());
         CenterEntity persistedEntity = centerRepository.save(entity);
+
+        AddressEntity address = null;
+        if (request.address() != null) {
+            centerAddressRepository.findByObjectId(id).ifPresent(centerAddressRepository::delete);
+            address = addressCreate.execute(request.address(), persistedEntity.getId());
+        }
 
         return centerResponseMapper.map(persistedEntity);
     }
