@@ -16,4 +16,16 @@ public class CompanyAddressEntity extends AddressEntity {
     public CompanyAddressEntity(String street, String city, String state, String zipCode, String country, Long objectId) {
         super(null, street, city, state, zipCode, country, objectId);
     }
+
+    @Override
+    public AddressEntity with(String street, String city, String state, String zipCode, String country) {
+        return new CompanyAddressEntity(
+            street != null ? street : getStreet(),
+            city != null ? city : getCity(),
+            state != null ? state : getState(),
+            zipCode != null ? zipCode : getZipCode(),
+            country != null ? country : getCountry(),
+            getObjectId()
+        );
+    }
 }

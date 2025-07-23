@@ -1,3 +1,5 @@
 package com.example.center.dto.request;
 
-public record CenterUpdateRequest(String name, String description) {}
+import com.example.address.dto.AddressCreateRequest;
+
+public record CenterUpdateRequest(String name, String description, AddressCreateRequest address) {}
