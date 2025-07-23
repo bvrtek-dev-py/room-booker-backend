@@ -7,7 +7,6 @@ import com.example.address.entity.AddressEntity;
 import com.example.address.mapper.AddressResponseMapper;
 import com.example.center.dto.response.CenterResponse;
 import com.example.center.entity.CenterEntity;
-import com.example.center.repository.CenterAddressRepository;
 import com.example.company.mapper.CompanyResponseMapperFacade;
 
 @Component
@@ -21,11 +20,7 @@ public class CenterResponseMapperFacade {
     @Autowired
     private AddressResponseMapper addressResponseMapper;
 
-    @Autowired
-    private CenterAddressRepository centerAddressRepository;
-
-    public CenterResponse map(CenterEntity entity) {
-        AddressEntity address = centerAddressRepository.findByObjectId(entity.getId()).orElse(null);
+    public CenterResponse map(CenterEntity entity, AddressEntity address) {
         return centerResponseMapper.map(
             entity,
             companyResponseMapperFacade.map(entity.getCompany(), null),
