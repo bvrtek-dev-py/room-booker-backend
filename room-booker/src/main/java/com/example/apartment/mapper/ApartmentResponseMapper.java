@@ -13,5 +13,6 @@ public interface ApartmentResponseMapper {
     @Mapping(target = "name", source = "apartment.name")
     @Mapping(target = "numberOfPeople", source = "apartment.numberOfPeople")
     @Mapping(target = "description", source = "apartment.description")
+    @Mapping(target = "center", source = "center")
     ApartmentResponse map(ApartmentEntity apartment, CenterResponse center);
 }

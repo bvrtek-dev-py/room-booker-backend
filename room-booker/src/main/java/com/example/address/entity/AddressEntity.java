@@ -80,4 +80,6 @@ public abstract class AddressEntity {
     public Long getObjectId() {
         return objectId;
     }
+
+    public abstract AddressEntity with(String street, String city, String state, String zipCode, String country);
 }

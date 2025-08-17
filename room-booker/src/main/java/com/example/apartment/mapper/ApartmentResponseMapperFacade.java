@@ -16,6 +16,6 @@ public class ApartmentResponseMapperFacade {
     private CenterResponseMapperFacade centerResponseMapperFacade;
 
     public ApartmentResponse map(ApartmentEntity apartment) {
-        return apartmentResponseMapper.map(apartment, centerResponseMapperFacade.map(apartment.getCenter()));
+        return apartmentResponseMapper.map(apartment, centerResponseMapperFacade.map(apartment.getCenter(), null));
     }
 }
