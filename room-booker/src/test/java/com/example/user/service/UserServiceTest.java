@@ -53,7 +53,6 @@ class UserServiceTest {
         List<UserEntity> entities = List.of(user1, user2);
         List<UserResponse> expectedResponses = List.of(response1, response2);
     
-        // mock behavior
         when(userRepository.findAll()).thenReturn(entities);
         when(userResponseMapper.map(user1)).thenReturn(response1);
         when(userResponseMapper.map(user2)).thenReturn(response2);
@@ -84,7 +83,6 @@ class UserServiceTest {
         UserEntity savedEntity = new UserEntity(1L, "testUser", encodedPassword, "test@example.com", UserRole.USER);
         UserResponse expectedResponse = new UserResponse(1L, "testUser", "test@example.com", UserRole.USER);
 
-        // mock behavior
         when(passwordEncoder.encode("plainPassword")).thenReturn(encodedPassword);
         when(userEntityMapper.map(any(UserCreateRequest.class), eq(UserRole.USER))).thenReturn(mappedEntity);
         when(userRepository.save(mappedEntity)).thenReturn(savedEntity);
@@ -100,7 +98,6 @@ class UserServiceTest {
         assertEquals(expectedResponse.getEmail(), actualResponse.getEmail());
         assertEquals(expectedResponse.getRole(), actualResponse.getRole());
 
-        // verify interactions
         verify(passwordEncoder, times(1)).encode("plainPassword");
         verify(userEntityMapper, times(1)).map(any(UserCreateRequest.class), eq(UserRole.USER));
         verify(userRepository, times(1)).save(mappedEntity);
@@ -118,7 +115,6 @@ class UserServiceTest {
         UserEntity savedUser = new UserEntity(userId, "oldUsername", "encodedPass", "newEmail@example.com", UserRole.USER);
         UserResponse expectedResponse = new UserResponse(userId, "oldUsername", "newEmail@example.com", UserRole.USER);
 
-        // mock behavior
         when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
         when(userEntityMapper.map(updateRequest, existingUser)).thenReturn(mappedUser);
         when(userRepository.save(mappedUser)).thenReturn(savedUser);
