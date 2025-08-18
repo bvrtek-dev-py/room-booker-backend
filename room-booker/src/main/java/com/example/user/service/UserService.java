@@ -1,7 +1,6 @@
 package com.example.user.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,7 +39,7 @@ public class UserService {
         isUsernameTaken(request.getUsername());
 
         final String encodedPassword = passwordEncoder.encode(request.getPassword());
-        UserCreateRequest finalRequest = request.with(Optional.of(encodedPassword), Optional.empty(), Optional.empty());
+        UserCreateRequest finalRequest = request.with(encodedPassword, null, null);
 
         UserEntity user = userEntityMapper.map(finalRequest, UserRole.USER);
         UserEntity savedUser = userRepository.save(user);

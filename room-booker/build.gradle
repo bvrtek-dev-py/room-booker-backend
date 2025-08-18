@@ -3,31 +3,33 @@ plugins {
 	id 'org.springframework.boot' version '3.4.5'
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'com.diffplug.spotless' version '6.25.0'
+	// id 'checkstyle'
+
 }
 
-spotless {
-    java {
-		palantirJavaFormat()
-        removeUnusedImports()
-        importOrder('java', 'javax', '', 'org', 'com')
-        trimTrailingWhitespace()
-        endWithNewline()
-        custom 'Remove multiple blank lines', {
-            it.replaceAll(/(?m)^\s*\n{2,}/, "\n")
-        }
-    }
-
-    format 'markdown', {
-        target '**/*.md'
-        trimTrailingWhitespace()
-        endWithNewline()
-    }
-
-    format 'yaml', {
-        target '**/*.yml', '**/*.yaml'
-        prettier().config(['parser': 'yaml'])
-    }
-}
+//spotless {
+//    java {
+//		palantirJavaFormat()
+//        removeUnusedImports()
+//        importOrder('java', 'javax', '', 'org', 'com')
+//        trimTrailingWhitespace()
+//        endWithNewline()
+//        custom 'Remove multiple blank lines', {
+//            it.replaceAll(/(?m)^\s*\n{2,}/, "\n")
+//        }
+//    }
+//
+//    format 'markdown', {
+//        target '**/*.md'
+//        trimTrailingWhitespace()
+//        endWithNewline()
+//    }
+//
+//    format 'yaml', {
+//        target '**/*.yml', '**/*.yaml'
+//        prettier().config(['parser': 'yaml'])
+//    }
+//}
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
