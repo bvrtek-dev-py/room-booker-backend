@@ -1,3 +1,9 @@
 package com.example.user.dto.request;
 
-public class UserUpdateRequest extends UserBaseRequest {}
+public class UserUpdateRequest extends UserBaseRequest {
+    public UserUpdateRequest() {}
+
+    public UserUpdateRequest(String username) {
+        this.username = username;
+    }
+}

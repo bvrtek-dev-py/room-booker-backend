@@ -1,7 +1,5 @@
 package com.example.user.dto.request;
 
-import java.util.Optional;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
@@ -13,6 +11,14 @@ public class UserCreateRequest extends UserBaseRequest {
     @Email(message = "Invalid email format")
     protected String email;
 
+    public UserCreateRequest() {}
+
+    public UserCreateRequest(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -21,12 +27,12 @@ public class UserCreateRequest extends UserBaseRequest {
         return email;
     }
 
-    public UserCreateRequest with(Optional<String> newPassword, Optional<String> newEmail, Optional<String> username) {
+    public UserCreateRequest with(String password, String email, String username) {
         UserCreateRequest newRequest = new UserCreateRequest();
 
-        newRequest.password = newPassword.orElse(this.password);
-        newRequest.email = newEmail.orElse(this.email);
-        newRequest.username = username.orElse(this.username);
+        newRequest.password = (password != null) ? password : this.password;
+        newRequest.email = (email != null) ? email : this.email;
+        newRequest.username = (username != null) ? username : this.username;
 
         return newRequest;
     }
