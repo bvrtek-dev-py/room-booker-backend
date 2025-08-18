@@ -36,5 +36,4 @@ public class UserCreateRequest extends UserBaseRequest {
 
         return newRequest;
     }
-    
 }

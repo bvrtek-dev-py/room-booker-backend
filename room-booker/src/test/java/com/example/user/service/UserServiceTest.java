@@ -140,19 +140,6 @@ class UserServiceTest {
         verify(userResponseMapper, times(1)).map(savedUser);
     }
 
-
-    @Test
-    void testGetUserById() {
-        // User user = new User("testUser");
-        // when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-
-        // User foundUser = userService.getUserById(1L);
-
-        assertEquals("asd", "asd");
-        // assertNotNull(foundUser);
-        // assertEquals("testUser", foundUser.getName());
-    }
-
     @Test
     void testDeleteUser() {
         // given
