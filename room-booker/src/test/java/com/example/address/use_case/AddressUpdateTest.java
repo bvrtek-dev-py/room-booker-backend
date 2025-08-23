@@ -37,7 +37,6 @@ class AddressUpdateTest {
 
     @BeforeEach
     void setUp() {
-        // Tworzymy anonimową instancję abstrakcyjnej klasy
         addressEntity = new AddressEntity(1L, "Old St", "Old City", "Old State", "00000", "Old Country", 42L) {
             @Override
             public AddressEntity with(String street, String city, String state, String zipCode, String country) {
