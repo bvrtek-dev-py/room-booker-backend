@@ -30,6 +30,16 @@ public class AddressCreateRequest {
     @NotNull(message = "Reference type is required")
     private ReferenceType referenceType;
 
+    public AddressCreateRequest(String street, String city, String state, String zipCode, String country, ReferenceType referenceType) {
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.zipCode = zipCode;
+        this.country = country;
+        this.referenceType = referenceType;
+    }
+    
+
     public String getStreet() {
         return street;
     }
