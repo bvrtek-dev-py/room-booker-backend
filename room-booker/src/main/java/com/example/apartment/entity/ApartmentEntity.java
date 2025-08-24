@@ -58,7 +58,8 @@ public class ApartmentEntity {
             double pricePerNight,
             int amount,
             List<Facility> facilities,
-            CenterEntity center) {
+            CenterEntity center
+    ) {
         this.id = id;
         this.name = name;
         this.numberOfPeople = numberOfPeople;
@@ -102,25 +103,25 @@ public class ApartmentEntity {
     }
 
     public ApartmentEntity with(
-        Long newId,
-        String newName,
-        Integer newNumberOfPeople,
-        String newDescription,
-        Double newPricePerNight,
-        Integer newAmount,
-        List<Facility> newFacilities,
-        CenterEntity newCenter
+        Long id,
+        String name,
+        Integer numberOfPeople,
+        String description,
+        Double pricePerNight,
+        Integer amount,
+        List<Facility> facilities,
+        CenterEntity center
     ) {
         ApartmentEntity newApartment = new ApartmentEntity();
 
-        newApartment.id = (newId != null) ? newId : this.id;
-        newApartment.name = (newName != null) ? newName : this.name;
-        newApartment.numberOfPeople = (newNumberOfPeople != null) ? newNumberOfPeople : this.numberOfPeople;
-        newApartment.description = (newDescription != null) ? newDescription : this.description;
-        newApartment.pricePerNight = (newPricePerNight != null) ? newPricePerNight : this.pricePerNight;
-        newApartment.amount = (newAmount != null) ? newAmount : this.amount;
-        newApartment.facilities = (newFacilities != null) ? newFacilities : this.facilities;
-        newApartment.center = (newCenter != null) ? newCenter : this.center;
+        newApartment.id = (id != null) ? id : this.id;
+        newApartment.name = (name != null) ? name : this.name;
+        newApartment.numberOfPeople = (numberOfPeople != null) ? numberOfPeople : this.numberOfPeople;
+        newApartment.description = (description != null) ? description : this.description;
+        newApartment.pricePerNight = (pricePerNight != null) ? pricePerNight : this.pricePerNight;
+        newApartment.amount = (amount != null) ? amount : this.amount;
+        newApartment.facilities = (facilities != null) ? facilities : this.facilities;
+        newApartment.center = (center != null) ? center : this.center;
 
         return newApartment;
     }
