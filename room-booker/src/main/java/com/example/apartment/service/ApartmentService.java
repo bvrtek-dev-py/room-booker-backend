@@ -1,7 +1,6 @@
 package com.example.apartment.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,13 +47,15 @@ public class ApartmentService {
         throwIfNotApartmentOwner(existingApartment, userId);
 
         ApartmentEntity apartment = existingApartment.with(
-                Optional.of(request.getName()),
-                Optional.of(request.getNumberOfPeople()),
-                Optional.of(request.getDescription()),
-                Optional.of(request.getPricePerNight()),
-                Optional.of(request.getAmount()),
-                Optional.ofNullable(request.getFacilities()),
-                Optional.empty());
+                null,
+                request.getName(),
+                request.getNumberOfPeople(),
+                request.getDescription(),
+                request.getPricePerNight(),
+                request.getAmount(),
+                request.getFacilities(),
+                null
+            );
         ApartmentEntity updatedApartment = apartmentRepository.save(apartment);
 
         return apartmentResponseMapperFacade.map(updatedApartment);
