@@ -7,7 +7,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import org.mockito.InjectMocks;
@@ -97,28 +96,57 @@ class ApartmentServiceTest {
     void shouldUpdateApartment() {
         // given
         ApartmentUpdateRequest request = mock(ApartmentUpdateRequest.class);
+        given(request.getName()).willReturn("Updated name");
+        given(request.getNumberOfPeople()).willReturn(5);
+        given(request.getDescription()).willReturn("Updated desc");
+        given(request.getPricePerNight()).willReturn(200.0);
+        given(request.getAmount()).willReturn(3);
+        given(request.getFacilities()).willReturn(List.of());
+    
         given(apartmentRepository.findById(1L)).willReturn(Optional.of(apartmentEntity));
         given(apartmentEntity.getCenter()).willReturn(centerEntity);
-        given(centerEntity.getCompany()).willReturn(mock(CompanyEntity.class));
-        given(centerEntity.getCompany().getUser()).willReturn(mock(UserEntity.class));
-        given(centerEntity.getCompany().getUser().getId()).willReturn(1L);
-
+    
+        CompanyEntity company = mock(CompanyEntity.class);
+        UserEntity user = mock(UserEntity.class);
+        given(centerEntity.getCompany()).willReturn(company);
+        given(company.getUser()).willReturn(user);
+        given(user.getId()).willReturn(1L);
+    
         ApartmentEntity updatedApartment = mock(ApartmentEntity.class);
-        given(apartmentEntity.with(any(), any(), any(), any(), any(), any(), any(), any()))
-                .willReturn(updatedApartment);
+    
+        given(apartmentEntity.with(
+                null,
+                "Updated name",
+                5,
+                "Updated desc",
+                200.0,
+                3,
+                List.of(),
+                null
+        )).willReturn(updatedApartment);
+    
         given(apartmentRepository.save(updatedApartment)).willReturn(updatedApartment);
         given(apartmentResponseMapperFacade.map(updatedApartment)).willReturn(apartmentResponse);
-
+    
         // when
         ApartmentResponse result = apartmentService.update(1L, request, 1L);
-
+    
         // then
         assertThat(result).isEqualTo(apartmentResponse);
-        then(apartmentRepository).should(times(1)).findById(1L);
-        then(apartmentEntity).should(times(1)).with(any(), any(), any(), any(), any(), any(), any(), any());
+        then(apartmentEntity).should(times(1)).with(
+                null,
+                "Updated name",
+                5,
+                "Updated desc",
+                200.0,
+                3,
+                List.of(),
+                null
+        );
         then(apartmentRepository).should(times(1)).save(updatedApartment);
         then(apartmentResponseMapperFacade).should(times(1)).map(updatedApartment);
     }
+    
 
     @Test
     void shouldThrowPermissionDeniedOnUpdate() {
