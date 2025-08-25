@@ -157,7 +157,7 @@ class ApartmentServiceTest {
         given(apartmentEntity.getCenter()).willReturn(centerEntity);
         given(centerEntity.getCompany()).willReturn(mock(CompanyEntity.class));
         given(centerEntity.getCompany().getUser()).willReturn(otherUser);
-        given(otherUser.getId()).willReturn(2L); // inny user
+        given(otherUser.getId()).willReturn(2L);
 
         // when / then
         assertThrows(PermissionDeniedException.class,
