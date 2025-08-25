@@ -1,7 +1,6 @@
 package com.example.apartment.entity;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.example.apartment.type.Facility;
 import com.example.center.entity.CenterEntity;
@@ -59,7 +58,8 @@ public class ApartmentEntity {
             double pricePerNight,
             int amount,
             List<Facility> facilities,
-            CenterEntity center) {
+            CenterEntity center
+    ) {
         this.id = id;
         this.name = name;
         this.numberOfPeople = numberOfPeople;
@@ -103,23 +103,25 @@ public class ApartmentEntity {
     }
 
     public ApartmentEntity with(
-            Optional<String> newName,
-            Optional<Integer> newNumberOfPeople,
-            Optional<String> newDescription,
-            Optional<Double> newPricePerNight,
-            Optional<Integer> newAmount,
-            Optional<List<Facility>> newFacilities,
-            Optional<CenterEntity> newCenter) {
+        Long id,
+        String name,
+        Integer numberOfPeople,
+        String description,
+        Double pricePerNight,
+        Integer amount,
+        List<Facility> facilities,
+        CenterEntity center
+    ) {
         ApartmentEntity newApartment = new ApartmentEntity();
 
-        newApartment.id = this.id;
-        newApartment.name = newName.orElse(this.name);
-        newApartment.numberOfPeople = newNumberOfPeople.orElse(this.numberOfPeople);
-        newApartment.description = newDescription.orElse(this.description);
-        newApartment.pricePerNight = newPricePerNight.orElse(this.pricePerNight);
-        newApartment.amount = newAmount.orElse(this.amount);
-        newApartment.facilities = newFacilities.orElse(this.facilities);
-        newApartment.center = newCenter.orElse(this.center);
+        newApartment.id = (id != null) ? id : this.id;
+        newApartment.name = (name != null) ? name : this.name;
+        newApartment.numberOfPeople = (numberOfPeople != null) ? numberOfPeople : this.numberOfPeople;
+        newApartment.description = (description != null) ? description : this.description;
+        newApartment.pricePerNight = (pricePerNight != null) ? pricePerNight : this.pricePerNight;
+        newApartment.amount = (amount != null) ? amount : this.amount;
+        newApartment.facilities = (facilities != null) ? facilities : this.facilities;
+        newApartment.center = (center != null) ? center : this.center;
 
         return newApartment;
     }
