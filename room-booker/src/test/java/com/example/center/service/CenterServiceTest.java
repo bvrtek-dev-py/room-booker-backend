@@ -99,6 +99,7 @@ class CenterServiceTest {
         // given
         JwtPayload user = new JwtPayload(10L, "john@doe.com");
         CenterCreateRequest request = mock(CenterCreateRequest.class);
+
         given(request.getName()).willReturn("Dup");
         given(companyGetIfUserIsOwner.execute(anyLong(), anyLong())).willReturn(mock(CompanyEntity.class));
         given(centerRepository.existsByName("Dup")).willReturn(true);
@@ -122,7 +123,7 @@ class CenterServiceTest {
         given(centerRepository.existsByName("New Name")).willReturn(false);
 
         CenterEntity updated = new CenterEntity(7L, "New Name", "New Desc", company);
-        given(centerRepository.save(any())).willReturn(updated);
+        given(centerRepository.save(any(CenterEntity.class))).willReturn(updated);
 
         AddressEntity address = mock(AddressEntity.class);
         given(addressUpdate.execute(addrReq, 7L)).willReturn(address);
