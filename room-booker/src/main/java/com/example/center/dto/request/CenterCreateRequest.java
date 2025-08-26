@@ -12,6 +12,12 @@ public class CenterCreateRequest {
     @NotNull(message = "Address is required")
     private AddressCreateRequest address;
 
+    public CenterCreateRequest(String name, String description, AddressCreateRequest address) {
+        this.name = name;
+        this.description = description;
+        this.address = address;
+    }
+
     public String getName() {
         return name;
     }
