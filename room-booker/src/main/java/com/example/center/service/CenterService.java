@@ -1,7 +1,6 @@
 package com.example.center.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,12 +68,11 @@ public class CenterService {
         CenterEntity existingEntity = centerGetById.execute(id);
 
         throwIfNotCompanyOwner(existingEntity, userId);
-        this.existsByName(request.name());
+        this.existsByName(request.getName());
 
-        CenterEntity entity =
-                existingEntity.with(Optional.of(request.name()), Optional.of(request.description()), Optional.empty());
+        CenterEntity entity = existingEntity.with(null, request.getName(), request.getDescription(), null);
         CenterEntity persistedEntity = centerRepository.save(entity);
-        AddressEntity address = addressUpdate.execute(request.address(), persistedEntity.getId());
+        AddressEntity address = addressUpdate.execute(request.getAddress(), persistedEntity.getId());
 
         return centerResponseMapperFacade.map(persistedEntity, address);
     }
