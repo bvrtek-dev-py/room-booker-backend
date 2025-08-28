@@ -72,8 +72,8 @@ public class CompanyService {
         CompanyEntity savedEntity = companyRepository.save(entity);
 
         AddressEntity address = null;
-        if (company.address() != null) {
-            address = addressCreate.execute(company.address(), savedEntity.getId());
+        if (company.getAddress() != null) {
+            address = addressCreate.execute(company.getAddress(), savedEntity.getId());
         }
 
         return companyResponseMapper.map(savedEntity, address);
@@ -81,7 +81,7 @@ public class CompanyService {
 
     @Transactional
     public CompanyResponse update(Long id, CompanyUpdateRequest request, JwtPayload user) {
-        this.existsByName(request.name());
+        this.existsByName(request.getName());
 
         UserEntity userEntity = userGetById.execute(user.getId());
         CompanyEntity existingCompany = getEntityById(id);
@@ -90,13 +90,13 @@ public class CompanyService {
             throw new PermissionDeniedException();
         }
 
-        CompanyEntity companyToUpdate = companyModelFactory.make(existingCompany.getId(), request.name(), userEntity);
+        CompanyEntity companyToUpdate = companyModelFactory.make(existingCompany.getId(), request.getName(), userEntity);
         CompanyEntity savedCompany = companyRepository.save(companyToUpdate);
 
         AddressEntity address = null;
-        if (request.address() != null) {
+        if (request.getAddress() != null) {
             companyAddressRepository.findByObjectId(id).ifPresent(companyAddressRepository::delete);
-            address = addressCreate.execute(request.address(), savedCompany.getId());
+            address = addressCreate.execute(request.getAddress(), savedCompany.getId());
         }
 
         return companyResponseMapper.map(savedCompany, address);

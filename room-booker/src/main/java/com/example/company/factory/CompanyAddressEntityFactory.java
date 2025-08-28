@@ -12,11 +12,12 @@ public class CompanyAddressEntityFactory implements AddressEntityFactory {
     @Override
     public AddressEntity make(AddressCreateRequest request, Long objectId) {
         return new CompanyAddressEntity(
-                request.getStreet(),
-                request.getCity(),
-                request.getState(),
-                request.getZipCode(),
-                request.getCountry(),
-                objectId);
+            request.getStreet(),
+            request.getCity(),
+            request.getState(),
+            request.getZipCode(),
+            request.getCountry(),
+            objectId
+        );
     }
 }
