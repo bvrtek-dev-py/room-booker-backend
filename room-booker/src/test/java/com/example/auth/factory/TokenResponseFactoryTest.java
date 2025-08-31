@@ -5,14 +5,21 @@ import java.util.Date;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.auth.dto.TokenResponse;
 
+
+@ExtendWith(MockitoExtension.class)
 class TokenResponseFactoryTest {
+    @InjectMocks
+    private TokenResponseFactory factory;
+
     @Test
     void create_shouldReturnTokenResponseWithGivenArguments() {
         // given
-        TokenResponseFactory factory = new TokenResponseFactory();
         String accessToken = "access";
         String refreshToken = "refresh";
         String tokenType = "Bearer";

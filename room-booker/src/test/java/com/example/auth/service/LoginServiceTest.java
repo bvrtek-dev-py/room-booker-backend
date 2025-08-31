@@ -52,7 +52,7 @@ class LoginServiceTest {
         String accessToken = "access.token";
         String refreshToken = "refresh.token";
         String bearer = "Bearer";
-        TokenResponse expectedResponse = mock(TokenResponse.class); // albo mock(TokenResponse.class)
+        TokenResponse expectedResponse = mock(TokenResponse.class);
 
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenReturn(authentication);

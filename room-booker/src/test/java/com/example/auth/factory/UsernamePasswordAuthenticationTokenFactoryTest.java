@@ -6,15 +6,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import com.example.auth.dto.JwtPayload;
 
+
+@ExtendWith(MockitoExtension.class)
 class UsernamePasswordAuthenticationTokenFactoryTest {
+    @InjectMocks
+    private UsernamePasswordAuthenticationTokenFactory factory;
+
     @Test
     void make_shouldReturnTokenWithGivenPayloadAndCredentials() {
         // given
-        UsernamePasswordAuthenticationTokenFactory factory = new UsernamePasswordAuthenticationTokenFactory();
         JwtPayload payload = new JwtPayload(42L, "user@example.com");
         Optional<Object> credentials = Optional.of("secret");
 
