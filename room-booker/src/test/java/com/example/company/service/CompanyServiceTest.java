@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -111,7 +112,7 @@ class CompanyServiceTest {
                 .willReturn(new CompanyEntity(1L, "Updated Company", userEntity));
 
         CompanyEntity updated = new CompanyEntity(1L, "Updated Company", userEntity);
-        given(companyRepository.save(updated)).willReturn(updated);
+        given(companyRepository.save(any(CompanyEntity.class))).willReturn(updated);
 
         AddressEntity addressEntity = mock(AddressEntity.class);
         given(companyAddressRepository.findByObjectId(1L)).willReturn(Optional.empty());
