@@ -26,7 +26,6 @@ import com.example.user.mapper.UserResponseMapper;
 import com.example.user.repository.UserRepository;
 import com.example.user.role.UserRole;
 
-
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
     @Mock
