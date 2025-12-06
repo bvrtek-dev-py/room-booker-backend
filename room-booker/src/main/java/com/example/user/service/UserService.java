@@ -51,8 +51,12 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public UserResponse update(Long id, UserUpdateRequest request) {
-        UserEntity user = userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException());
+    public void deleteCurrentUser(Long userId) {
+        userRepository.deleteById(userId);
+    }
+
+    public UserResponse update(Long userId, UserUpdateRequest request) {
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException());
 
         UserEntity mappedUser = userEntityMapper.map(request, user);
         UserEntity updatedUser = userRepository.save(mappedUser);

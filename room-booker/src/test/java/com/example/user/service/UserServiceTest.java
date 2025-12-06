@@ -26,7 +26,6 @@ import com.example.user.mapper.UserResponseMapper;
 import com.example.user.repository.UserRepository;
 import com.example.user.role.UserRole;
 
-
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
     @Mock
@@ -134,6 +133,18 @@ class UserServiceTest {
         verify(userEntityMapper, times(1)).map(updateRequest, existingUser);
         verify(userRepository, times(1)).save(mappedUser);
         verify(userResponseMapper, times(1)).map(savedUser);
+    }
+
+    @Test
+    void testDeleteCurrentUser() {
+        // given
+        Long userId = 1L;
+
+        // when
+        userService.deleteCurrentUser(userId);
+
+        // then
+        verify(userRepository, times(1)).deleteById(userId);
     }
 
     @Test
