@@ -51,9 +51,6 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public void deleteCurrentUser(Long userId) {
-        userRepository.deleteById(userId);
-    }
 
     public UserResponse update(Long userId, UserUpdateRequest request) {
         UserEntity user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException());

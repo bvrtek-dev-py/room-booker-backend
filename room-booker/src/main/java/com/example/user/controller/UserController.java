@@ -44,7 +44,7 @@ public class UserController {
     @DeleteMapping
     public ResponseEntity<Void> deleteUser() {
         JwtPayload jwtPayload = (JwtPayload) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        userService.deleteCurrentUser(jwtPayload.getId());
+        userService.delete(jwtPayload.getId());
         return ResponseEntity.noContent().build();
     }
 }

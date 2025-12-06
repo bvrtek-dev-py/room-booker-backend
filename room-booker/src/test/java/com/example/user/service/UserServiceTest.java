@@ -136,18 +136,6 @@ class UserServiceTest {
     }
 
     @Test
-    void testDeleteCurrentUser() {
-        // given
-        Long userId = 1L;
-
-        // when
-        userService.deleteCurrentUser(userId);
-
-        // then
-        verify(userRepository, times(1)).deleteById(userId);
-    }
-
-    @Test
     void testDeleteUser() {
         // given
         Long userId = 1L;
