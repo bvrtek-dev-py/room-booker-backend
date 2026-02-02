@@ -1,6 +1,7 @@
 package com.example.reservation.mapper;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,7 @@ public class ReservationEntityMapper {
     public ReservationEntity map(ReservationCreateRequest request, UserEntity user, ApartmentEntity apartment) {
         LocalDate checkInDate = request.getCheckInDate();
         LocalDate checkOutDate = request.getCheckOutDate();
-        long numberOfNights = java.time.temporal.ChronoUnit.DAYS.between(checkInDate, checkOutDate);
+        long numberOfNights = ChronoUnit.DAYS.between(checkInDate, checkOutDate);
         double totalPrice = numberOfNights * apartment.getPricePerNight();
 
         return new ReservationEntity(
