@@ -1,5 +1,6 @@
 package com.example.center.mapper;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class CenterResponseMapperFacade {
 
     private final AddressResponseMapper addressResponseMapper;
 
-    public CenterResponse map(@NotNull CenterEntity entity, AddressEntity address) {
+    public CenterResponse map(@NotNull CenterEntity entity, @Nullable AddressEntity address) {
         return centerResponseMapper.map(
             entity,
             companyResponseMapperFacade.map(entity.getCompany(), null),

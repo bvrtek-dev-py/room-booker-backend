@@ -12,15 +12,15 @@ import lombok.NoArgsConstructor;
 public class AddressResponse {
     @NotNull
     private Long id;
-    @NotBlank()
+    @NotBlank
     private String street;
-    @NotBlank()
+    @NotBlank
     private String city;
-    @NotBlank()
+    @NotBlank
     private String state;
-    @NotBlank()
+    @NotBlank
     private String zipCode;
-    @NotBlank()
+    @NotBlank
     private String country;
     @NotNull
     private Long objectId;

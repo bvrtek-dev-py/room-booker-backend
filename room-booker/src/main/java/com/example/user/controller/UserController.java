@@ -4,7 +4,7 @@ import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,19 +38,18 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<UserResponse> updateUser(@RequestBody UserUpdateRequest request) {
-        JwtPayload jwtPayload = (JwtPayload)
-                SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserResponse response = userService.update(jwtPayload.getId(), request);
+    public ResponseEntity<UserResponse> updateUser(
+        @RequestBody UserUpdateRequest request,
+        @AuthenticationPrincipal JwtPayload user
+    ) {
+        UserResponse response = userService.update(user.getId(), request);
 
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteUser() {
-        JwtPayload jwtPayload = (JwtPayload)
-                SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        userService.delete(jwtPayload.getId());
+    public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal JwtPayload user) {
+        userService.delete(user.getId());
 
         return ResponseEntity.noContent().build();
     }

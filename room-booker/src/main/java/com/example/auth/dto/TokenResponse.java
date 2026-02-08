@@ -15,7 +15,7 @@ public class TokenResponse {
     @NotBlank
     private String tokenType;
     @NotNull
-    private Date expiredAt; // Sprawdzić czy jest dedukowany walodator
+    private Date expiredAt;
     @NotBlank
     private String refreshToken;
     @NotBlank
