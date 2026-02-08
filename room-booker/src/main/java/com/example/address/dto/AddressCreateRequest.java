@@ -5,7 +5,13 @@ import com.example.address.type.ReferenceType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AddressCreateRequest {
     @NotBlank(message = "Street is required")
     @Size(max = 100, message = "Street must not exceed 100 characters")
@@ -29,38 +35,4 @@ public class AddressCreateRequest {
 
     @NotNull(message = "Reference type is required")
     private ReferenceType referenceType;
-
-    public AddressCreateRequest(String street, String city, String state, String zipCode, String country, ReferenceType referenceType) {
-        this.street = street;
-        this.city = city;
-        this.state = state;
-        this.zipCode = zipCode;
-        this.country = country;
-        this.referenceType = referenceType;
-    }
-    
-
-    public String getStreet() {
-        return street;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public ReferenceType getReferenceType() {
-        return referenceType;
-    }
 }

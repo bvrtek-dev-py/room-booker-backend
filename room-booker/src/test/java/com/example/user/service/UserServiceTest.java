@@ -1,19 +1,20 @@
 package com.example.user.service;
 
-import java.util.List;
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -30,10 +31,13 @@ import com.example.user.role.UserRole;
 class UserServiceTest {
     @Mock
     private UserRepository userRepository;
+
     @Mock
     private UserEntityMapper userEntityMapper;
+
     @Mock
     private UserResponseMapper userResponseMapper;
+
     @Mock
     private PasswordEncoder passwordEncoder;
 
@@ -45,37 +49,34 @@ class UserServiceTest {
         // given
         UserEntity user1 = new UserEntity(1L, "user1", "pass1", "user1@example.com", UserRole.USER);
         UserEntity user2 = new UserEntity(2L, "user2", "pass2", "user2@example.com", UserRole.SUPERUSER);
-    
+
         UserResponse response1 = new UserResponse(1L, "user1", "user1@example.com", UserRole.USER);
         UserResponse response2 = new UserResponse(2L, "user2", "user2@example.com", UserRole.SUPERUSER);
-    
+
         List<UserEntity> entities = List.of(user1, user2);
         List<UserResponse> expectedResponses = List.of(response1, response2);
-    
+
         when(userRepository.findAll()).thenReturn(entities);
         when(userResponseMapper.map(user1)).thenReturn(response1);
         when(userResponseMapper.map(user2)).thenReturn(response2);
-    
+
         // when
         List<UserResponse> actualResponses = userService.getAll();
-    
+
         // then
         assertNotNull(actualResponses);
         assertEquals(expectedResponses.size(), actualResponses.size());
         assertEquals(expectedResponses, actualResponses);
-    
+
         verify(userRepository, times(1)).findAll();
         verify(userResponseMapper, times(1)).map(user1);
         verify(userResponseMapper, times(1)).map(user2);
     }
-    
 
     @Test
     void testRegisterUser() {
         // given
-        UserCreateRequest request = new UserCreateRequest(
-            "testUser", "plainPassword", "test@example.com"
-        );
+        UserCreateRequest request = new UserCreateRequest("testUser", "plainPassword", "test@example.com");
 
         String encodedPassword = "encodedPassword";
         UserEntity mappedEntity = new UserEntity(null, "testUser", encodedPassword, "test@example.com", UserRole.USER);
@@ -83,7 +84,8 @@ class UserServiceTest {
         UserResponse expectedResponse = new UserResponse(1L, "testUser", "test@example.com", UserRole.USER);
 
         when(passwordEncoder.encode("plainPassword")).thenReturn(encodedPassword);
-        when(userEntityMapper.map(any(UserCreateRequest.class), eq(UserRole.USER))).thenReturn(mappedEntity);
+        when(userEntityMapper.map(any(UserCreateRequest.class), eq(UserRole.USER)))
+                .thenReturn(mappedEntity);
         when(userRepository.save(mappedEntity)).thenReturn(savedEntity);
         when(userResponseMapper.map(savedEntity)).thenReturn(expectedResponse);
 
@@ -109,9 +111,12 @@ class UserServiceTest {
         Long userId = 1L;
         UserUpdateRequest updateRequest = new UserUpdateRequest("newUsername");
 
-        UserEntity existingUser = new UserEntity(userId, "oldUsername", "encodedPass", "old@example.com", UserRole.USER);
-        UserEntity mappedUser = new UserEntity(userId, "oldUsername", "encodedPass", "newEmail@example.com", UserRole.USER);
-        UserEntity savedUser = new UserEntity(userId, "oldUsername", "encodedPass", "newEmail@example.com", UserRole.USER);
+        UserEntity existingUser =
+                new UserEntity(userId, "oldUsername", "encodedPass", "old@example.com", UserRole.USER);
+        UserEntity mappedUser =
+                new UserEntity(userId, "oldUsername", "encodedPass", "newEmail@example.com", UserRole.USER);
+        UserEntity savedUser =
+                new UserEntity(userId, "oldUsername", "encodedPass", "newEmail@example.com", UserRole.USER);
         UserResponse expectedResponse = new UserResponse(userId, "oldUsername", "newEmail@example.com", UserRole.USER);
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));

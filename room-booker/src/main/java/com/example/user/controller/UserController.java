@@ -2,7 +2,7 @@ package com.example.user.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,30 +21,37 @@ import com.example.user.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@RequiredArgsConstructor
 public class UserController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAll());
+        List<UserResponse> response = userService.getAll();
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
     public ResponseEntity<UserResponse> registerUser(@RequestBody UserCreateRequest request) {
-        return ResponseEntity.ok(userService.register(request));
+        UserResponse response = userService.register(request);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping
     public ResponseEntity<UserResponse> updateUser(@RequestBody UserUpdateRequest request) {
-        JwtPayload jwtPayload = (JwtPayload) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return ResponseEntity.ok(userService.update(jwtPayload.getId(), request));
+        JwtPayload jwtPayload = (JwtPayload)
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserResponse response = userService.update(jwtPayload.getId(), request);
+
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping
     public ResponseEntity<Void> deleteUser() {
-        JwtPayload jwtPayload = (JwtPayload) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        JwtPayload jwtPayload = (JwtPayload)
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         userService.delete(jwtPayload.getId());
+
         return ResponseEntity.noContent().build();
     }
 }

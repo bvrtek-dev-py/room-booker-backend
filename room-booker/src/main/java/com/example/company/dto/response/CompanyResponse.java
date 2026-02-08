@@ -2,33 +2,22 @@ package com.example.company.dto.response;
 
 import com.example.address.dto.AddressResponse;
 import com.example.user.dto.response.UserResponse;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CompanyResponse {
+    @NotNull
     private Long id;
+    @NotBlank
     private String name;
+    @NotNull
     private UserResponse user;
+    @NotNull
     private AddressResponse address;
-
-    public CompanyResponse(Long id, String name, UserResponse user, AddressResponse address) {
-        this.id = id;
-        this.name = name;
-        this.user = user;
-        this.address = address;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public UserResponse getUser() {
-        return user;
-    }
-
-    public AddressResponse getAddress() {
-        return address;
-    }
 }

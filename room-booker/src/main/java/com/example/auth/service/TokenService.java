@@ -17,7 +17,7 @@ public abstract class TokenService {
 
         return Jwts.builder()
                 .setSubject(email)
-                .claim("id", id)
+                .claim("id", id) // Constant
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(currentTimeMillis + getExpirationTime()))
                 .signWith(key)

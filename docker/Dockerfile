@@ -1,9 +1,9 @@
 FROM eclipse-temurin:24-jdk
 
-WORKDIR /app
+WORKDIR /app/room-booker
 
 # Kopiowanie plików projektu do obrazu
-COPY room-booker /app
+COPY room-booker /app/room-booker
 
 # Budowanie aplikacji za pomocą Gradle
 RUN ./gradlew clean build -x test -x spotlessCheck

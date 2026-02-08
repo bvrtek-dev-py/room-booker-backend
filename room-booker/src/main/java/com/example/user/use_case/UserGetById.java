@@ -1,18 +1,19 @@
 package com.example.user.use_case;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
 
 import com.example.common.exception.ObjectNotFoundException;
 import com.example.user.entity.UserEntity;
 import com.example.user.repository.UserRepository;
 
 @Component
+@RequiredArgsConstructor
 public class UserGetById {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public UserEntity execute(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException());
+    public UserEntity execute(@NotNull Long id) {
+        return userRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
     }
 }

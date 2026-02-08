@@ -2,9 +2,10 @@ package com.example.center.use_case;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.given;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import static org.mockito.BDDMockito.given;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -49,7 +50,6 @@ class CenterGetIfBelongsToUserTest {
         given(centerGetById.execute(10L)).willReturn(center);
 
         // when / then
-        assertThrows(PermissionDeniedException.class,
-                     () -> centerGetIfBelongsToUser.execute(10L, 999L));
+        assertThrows(PermissionDeniedException.class, () -> centerGetIfBelongsToUser.execute(10L, 999L));
     }
 }

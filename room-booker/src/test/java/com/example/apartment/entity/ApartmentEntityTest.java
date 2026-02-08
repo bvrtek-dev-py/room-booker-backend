@@ -1,10 +1,11 @@
 package com.example.apartment.entity;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
-import static org.mockito.Mockito.mock;
 
 import com.example.apartment.type.Facility;
 import com.example.center.entity.CenterEntity;
@@ -16,29 +17,12 @@ class ApartmentEntityTest {
         // given
         CenterEntity originalCenter = mock(CenterEntity.class);
         ApartmentEntity original = new ApartmentEntity(
-                1L,
-                "Original Name",
-                4,
-                "Original Description",
-                100.0,
-                2,
-                List.of(Facility.WIFI),
-                originalCenter
-        );
+                1L, "Original Name", 4, "Original Description", 100.0, 2, List.of(Facility.WIFI), originalCenter);
 
         CenterEntity newCenter = mock(CenterEntity.class);
 
         // when
-        ApartmentEntity copy = original.with(
-                10L,
-                "New Name",
-                null,
-                null,
-                150.0,
-                null,
-                null,
-                newCenter
-        );
+        ApartmentEntity copy = original.with(10L, "New Name", null, null, 150.0, null, null, newCenter);
 
         // then
         assertThat(copy).isNotSameAs(original);

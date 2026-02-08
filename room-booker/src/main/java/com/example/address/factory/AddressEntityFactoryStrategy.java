@@ -1,20 +1,22 @@
 package com.example.address.factory;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
 
 import com.example.address.type.ReferenceType;
 import com.example.center.factory.CenterAddressEntityFactory;
 import com.example.company.factory.CompanyAddressEntityFactory;
 
-@Component
-public class AddressEntityFactoryStrategy {
-    @Autowired
-    private CompanyAddressEntityFactory companyAddressEntityFactory;
-    @Autowired
-    private CenterAddressEntityFactory centerAddressEntityFactory;
+import lombok.RequiredArgsConstructor;
 
-    public AddressEntityFactory get(ReferenceType type) {
+@Component
+@RequiredArgsConstructor
+public class AddressEntityFactoryStrategy {
+    private final CompanyAddressEntityFactory companyAddressEntityFactory;
+
+    private final CenterAddressEntityFactory centerAddressEntityFactory;
+
+    public AddressEntityFactory get(@NotNull ReferenceType type) {
         return switch (type) {
             case COMPANY -> companyAddressEntityFactory;
             case CENTER -> centerAddressEntityFactory;

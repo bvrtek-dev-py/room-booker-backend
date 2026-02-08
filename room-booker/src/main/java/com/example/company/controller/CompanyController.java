@@ -2,7 +2,6 @@ package com.example.company.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
 
 import com.example.auth.dto.JwtPayload;
 import com.example.company.dto.request.CompanyCreateRequest;
@@ -22,9 +22,9 @@ import com.example.company.service.CompanyService;
 
 @RestController
 @RequestMapping("/api/v1/companies")
+@RequiredArgsConstructor
 public class CompanyController {
-    @Autowired
-    private CompanyService companyService;
+    private final CompanyService companyService;
 
     @GetMapping
     public ResponseEntity<List<CompanyResponse>> getAll() {
@@ -38,15 +38,18 @@ public class CompanyController {
 
     @PostMapping
     public ResponseEntity<CompanyResponse> create(
-            @RequestBody CompanyCreateRequest request, @AuthenticationPrincipal JwtPayload user) {
-        return ResponseEntity.ok(companyService.create(request, user));
+        @RequestBody CompanyCreateRequest request, @AuthenticationPrincipal JwtPayload user
+    ) {
+        CompanyResponse response = companyService.create(request, user);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CompanyResponse> update(
-            @PathVariable Long id,
-            @RequestBody CompanyUpdateRequest request,
-            @AuthenticationPrincipal JwtPayload user) {
+        @PathVariable Long id,
+        @RequestBody CompanyUpdateRequest request,
+        @AuthenticationPrincipal JwtPayload user
+    ) {
         return ResponseEntity.ok(companyService.update(id, request, user));
     }
 

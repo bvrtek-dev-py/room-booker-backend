@@ -2,9 +2,6 @@ package com.example.apartment.entity;
 
 import java.util.List;
 
-import com.example.apartment.type.Facility;
-import com.example.center.entity.CenterEntity;
-
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -17,7 +14,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+import com.example.apartment.type.Facility;
+import com.example.center.entity.CenterEntity;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class ApartmentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,60 +54,6 @@ public class ApartmentEntity {
     @ManyToOne
     @JoinColumn(name = "center_id", nullable = false)
     private CenterEntity center;
-
-    protected ApartmentEntity() {}
-
-    public ApartmentEntity(
-            Long id,
-            String name,
-            int numberOfPeople,
-            String description,
-            double pricePerNight,
-            int amount,
-            List<Facility> facilities,
-            CenterEntity center
-    ) {
-        this.id = id;
-        this.name = name;
-        this.numberOfPeople = numberOfPeople;
-        this.description = description;
-        this.pricePerNight = pricePerNight;
-        this.amount = amount;
-        this.facilities = facilities;
-        this.center = center;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getNumberOfPeople() {
-        return numberOfPeople;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public double getPricePerNight() {
-        return pricePerNight;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public List<Facility> getFacilities() {
-        return facilities;
-    }
-
-    public CenterEntity getCenter() {
-        return center;
-    }
 
     public ApartmentEntity with(
         Long id,

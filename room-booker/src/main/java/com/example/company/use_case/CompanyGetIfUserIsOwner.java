@@ -1,17 +1,18 @@
 package com.example.company.use_case;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
 
 import com.example.common.exception.PermissionDeniedException;
 import com.example.company.entity.CompanyEntity;
 
 @Component
+@RequiredArgsConstructor
 public class CompanyGetIfUserIsOwner {
-    @Autowired
-    private CompanyGetById companyGetById;
+    private final CompanyGetById companyGetById;
 
-    public CompanyEntity execute(Long companyId, Long userId) {
+    public CompanyEntity execute(@NotNull Long companyId, @NotNull Long userId) {
         CompanyEntity company = companyGetById.execute(companyId);
 
         if (!company.getUser().getId().equals(userId)) {

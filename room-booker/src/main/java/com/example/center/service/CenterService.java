@@ -2,8 +2,10 @@ package com.example.center.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.center.entity.CenterAddressEntity;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
 import com.example.address.entity.AddressEntity;
 import com.example.address.use_case.AddressCreate;
@@ -25,37 +27,29 @@ import com.example.company.use_case.CompanyGetById;
 import com.example.company.use_case.CompanyGetIfUserIsOwner;
 
 @Service
+@RequiredArgsConstructor
 public class CenterService {
-    @Autowired
-    private CenterRepository centerRepository;
+    private final CenterRepository centerRepository;
 
-    @Autowired
-    private CenterEntityMapper centerEntityMapper;
+    private final CenterEntityMapper centerEntityMapper;
 
-    @Autowired
-    private CenterResponseMapperFacade centerResponseMapperFacade;
+    private final CenterResponseMapperFacade centerResponseMapperFacade;
 
-    @Autowired
-    private CompanyGetIfUserIsOwner companyGetIfUserIsOwner;
+    private final CompanyGetIfUserIsOwner companyGetIfUserIsOwner;
 
-    @Autowired
-    private CompanyGetById companyGetById;
+    private final CompanyGetById companyGetById;
 
-    @Autowired
-    private CenterGetById centerGetById;
+    private final CenterGetById centerGetById;
 
-    @Autowired
-    private AddressCreate addressCreate;
+    private final AddressCreate addressCreate;
 
-    @Autowired
-    private CenterAddressRepository centerAddressRepository;
+    private final CenterAddressRepository centerAddressRepository;
 
-    @Autowired
-    private AddressUpdate addressUpdate;
+    private final AddressUpdate addressUpdate;
 
-    public CenterResponse create(CenterCreateRequest request, Long companyId, JwtPayload user) {
+    public CenterResponse create(@NotNull CenterCreateRequest request, @NotNull Long companyId, @NotNull JwtPayload user) {
         CompanyEntity company = companyGetIfUserIsOwner.execute(companyId, user.getId());
-        this.existsByName(request.getName());
+        existsByName(request.getName());
 
         CenterEntity entity = centerEntityMapper.map(request, company);
         CenterEntity persistedEntity = centerRepository.save(entity);
@@ -64,11 +58,11 @@ public class CenterService {
         return centerResponseMapperFacade.map(persistedEntity, address);
     }
 
-    public CenterResponse update(Long id, CenterUpdateRequest request, Long userId) {
+    public CenterResponse update(@NotNull Long id, @NotNull CenterUpdateRequest request, @NotNull Long userId) {
         CenterEntity existingEntity = centerGetById.execute(id);
 
         throwIfNotCompanyOwner(existingEntity, userId);
-        this.existsByName(request.getName());
+        existsByName(request.getName());
 
         CenterEntity entity = existingEntity.with(null, request.getName(), request.getDescription(), null);
         CenterEntity persistedEntity = centerRepository.save(entity);
@@ -77,22 +71,25 @@ public class CenterService {
         return centerResponseMapperFacade.map(persistedEntity, address);
     }
 
-    public List<CenterResponse> getAllByCompanyId(Long companyId) {
+    public List<CenterResponse> getAllByCompanyId(@NotNull Long companyId) {
         return centerRepository.findByCompany(companyGetById.execute(companyId)).stream()
                 .map(center -> {
-                    var address = centerAddressRepository.findByObjectId(center.getId()).orElse(null);
+                    var address = centerAddressRepository
+                            .findByObjectId(center.getId())
+                            .orElse(null);
                     return centerResponseMapperFacade.map(center, address);
                 })
                 .toList();
     }
 
-    public CenterResponse getById(Long id) {
-        var center = centerGetById.execute(id);
-        var address = centerAddressRepository.findByObjectId(center.getId()).orElse(null);
+    public CenterResponse getById(@NotNull Long id) {
+        CenterEntity center = centerGetById.execute(id);
+        CenterAddressEntity address = centerAddressRepository.findByObjectId(center.getId()).orElse(null);
+
         return centerResponseMapperFacade.map(center, address);
     }
 
-    public void delete(Long id, Long userId) {
+    public void delete(@NotNull Long id, @NotNull Long userId) {
         CenterEntity entity = centerGetById.execute(id);
 
         throwIfNotCompanyOwner(entity, userId);
@@ -100,13 +97,13 @@ public class CenterService {
         centerRepository.deleteById(id);
     }
 
-    private void existsByName(String name) {
+    private void existsByName(@NotNull String name) {
         if (centerRepository.existsByName(name)) {
             throw new ObjectAlreadyExistsException();
         }
     }
 
-    private void throwIfNotCompanyOwner(CenterEntity entity, Long userId) {
+    private void throwIfNotCompanyOwner(@NotNull CenterEntity entity, @NotNull Long userId) {
         if (!entity.getCompany().getUser().getId().equals(userId)) {
             throw new PermissionDeniedException();
         }

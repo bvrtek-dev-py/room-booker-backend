@@ -1,6 +1,6 @@
 package com.example.auth.authenticator;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,18 +16,15 @@ import com.example.user.entity.UserEntity;
 import com.example.user.repository.UserRepository;
 
 @Component
+@RequiredArgsConstructor
 public class Authenticator implements AuthenticationProvider {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private JwtPayloadFactory jwtPayloadFactory;
+    private final JwtPayloadFactory jwtPayloadFactory;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UsernamePasswordAuthenticationTokenFactory authenticationTokenFactory;
+    private final UsernamePasswordAuthenticationTokenFactory authenticationTokenFactory;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

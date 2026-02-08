@@ -12,12 +12,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "reference_type", discriminatorType = DiscriminatorType.STRING)
 @Table(name = "addresses")
 @Access(AccessType.FIELD)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class AddressEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,46 +46,6 @@ public abstract class AddressEntity {
 
     @Column(nullable = false)
     private Long objectId;
-
-    public AddressEntity() {}
-
-    public AddressEntity(Long id, String street, String city, String state, String zipCode, String country, Long objectId) {
-        this.id = id;
-        this.street = street;
-        this.city = city;
-        this.state = state;
-        this.zipCode = zipCode;
-        this.country = country;
-        this.objectId = objectId;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public Long getObjectId() {
-        return objectId;
-    }
 
     public abstract AddressEntity with(String street, String city, String state, String zipCode, String country);
 }

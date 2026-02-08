@@ -1,17 +1,18 @@
 package com.example.auth.authenticator;
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,10 +30,13 @@ import com.example.user.role.UserRole;
 class AuthenticatorTest {
     @Mock
     private UserRepository userRepository;
+
     @Mock
     private JwtPayloadFactory jwtPayloadFactory;
+
     @Mock
     private PasswordEncoder passwordEncoder;
+
     @Mock
     private UsernamePasswordAuthenticationTokenFactory authenticationTokenFactory;
 

@@ -1,7 +1,8 @@
 package com.example.center.mapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
 
 import com.example.address.entity.AddressEntity;
 import com.example.address.mapper.AddressResponseMapper;
@@ -10,17 +11,15 @@ import com.example.center.entity.CenterEntity;
 import com.example.company.mapper.CompanyResponseMapperFacade;
 
 @Component
+@RequiredArgsConstructor
 public class CenterResponseMapperFacade {
-    @Autowired
-    private CenterResponseMapper centerResponseMapper;
+    private final CenterResponseMapper centerResponseMapper;
 
-    @Autowired
-    private CompanyResponseMapperFacade companyResponseMapperFacade;
+    private final CompanyResponseMapperFacade companyResponseMapperFacade;
 
-    @Autowired
-    private AddressResponseMapper addressResponseMapper;
+    private final AddressResponseMapper addressResponseMapper;
 
-    public CenterResponse map(CenterEntity entity, AddressEntity address) {
+    public CenterResponse map(@NotNull CenterEntity entity, AddressEntity address) {
         return centerResponseMapper.map(
             entity,
             companyResponseMapperFacade.map(entity.getCompany(), null),
