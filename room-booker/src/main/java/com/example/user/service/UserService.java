@@ -2,9 +2,10 @@ package com.example.user.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
 import com.example.common.exception.ObjectAlreadyExistsException;
 import com.example.common.exception.ObjectNotFoundException;
@@ -18,24 +19,21 @@ import com.example.user.repository.UserRepository;
 import com.example.user.role.UserRole;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserEntityMapper userEntityMapper;
+    private final UserEntityMapper userEntityMapper;
 
-    @Autowired
-    private UserResponseMapper userResponseMapper;
+    private final UserResponseMapper userResponseMapper;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public List<UserResponse> getAll() {
         return userRepository.findAll().stream().map(userResponseMapper::map).toList();
     }
 
-    public UserResponse register(UserCreateRequest request) {
+    public UserResponse register(@NotNull UserCreateRequest request) {
         isUsernameTaken(request.getUsername());
 
         final String encodedPassword = passwordEncoder.encode(request.getPassword());
@@ -47,13 +45,12 @@ public class UserService {
         return userResponseMapper.map(savedUser);
     }
 
-    public void delete(Long id) {
+    public void delete(@NotNull Long id) {
         userRepository.deleteById(id);
     }
 
-
-    public UserResponse update(Long userId, UserUpdateRequest request) {
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException());
+    public UserResponse update(@NotNull Long userId, @NotNull UserUpdateRequest request) {
+        UserEntity user = userRepository.findById(userId).orElseThrow(ObjectNotFoundException::new);
 
         UserEntity mappedUser = userEntityMapper.map(request, user);
         UserEntity updatedUser = userRepository.save(mappedUser);
@@ -61,7 +58,7 @@ public class UserService {
         return userResponseMapper.map(updatedUser);
     }
 
-    private void isUsernameTaken(String username) {
+    private void isUsernameTaken(@NotNull String username) {
         if (userRepository.existsByUsername(username)) {
             throw new ObjectAlreadyExistsException();
         }

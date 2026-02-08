@@ -1,17 +1,18 @@
 package com.example.apartment.mapper;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import static org.mockito.BDDMockito.given;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.example.apartment.dto.response.ApartmentResponse;
@@ -51,8 +52,7 @@ class ApartmentResponseMapperFacadeTest {
                 120.0,
                 3,
                 List.of(Facility.WIFI, Facility.PARKING),
-                centerEntity
-        );
+                centerEntity);
 
         centerResponse = new CenterResponse(10L, "Main Center", "Opis", null, null);
 
@@ -64,8 +64,7 @@ class ApartmentResponseMapperFacadeTest {
                 120.0,
                 3,
                 List.of(Facility.WIFI, Facility.PARKING),
-                centerResponse
-        );
+                centerResponse);
     }
 
     @Test

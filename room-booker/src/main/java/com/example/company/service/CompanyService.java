@@ -2,9 +2,11 @@ package com.example.company.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.company.entity.CompanyAddressEntity;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 
 import com.example.address.entity.AddressEntity;
 import com.example.address.use_case.AddressCreate;
@@ -25,49 +27,46 @@ import com.example.user.entity.UserEntity;
 import com.example.user.use_case.UserGetById;
 
 @Service
+@RequiredArgsConstructor
 public class CompanyService {
-    @Autowired
-    private CompanyRepository companyRepository;
+    private final CompanyRepository companyRepository;
 
-    @Autowired
-    private CompanyEntityFactory companyModelFactory;
+    private final CompanyEntityFactory companyModelFactory;
 
-    @Autowired
-    private CompanyEntityMapper companyModelMapper;
+    private final CompanyEntityMapper companyModelMapper;
 
-    @Autowired
-    private UserGetById userGetById;
+    private final UserGetById userGetById;
 
-    @Autowired
-    private CompanyResponseMapperFacade companyResponseMapper;
+    private final CompanyResponseMapperFacade companyResponseMapper;
 
-    @Autowired
-    private AddressCreate addressCreate;
+    private final AddressCreate addressCreate;
 
-    @Autowired
-    private CompanyAddressRepository companyAddressRepository;
+    private final CompanyAddressRepository companyAddressRepository;
 
     public List<CompanyResponse> getAllCompanies() {
         return companyRepository.findAll().stream()
                 .map(company -> {
-                    var address = companyAddressRepository.findByObjectId(company.getId()).orElse(null);
+                    var address = companyAddressRepository
+                            .findByObjectId(company.getId())
+                            .orElse(null);
                     return companyResponseMapper.map(company, address);
                 })
                 .toList();
     }
 
-    public CompanyResponse getById(Long id) {
+    public CompanyResponse getById(@NotNull Long id) {
         CompanyEntity entity = getEntityById(id);
-        var address = companyAddressRepository.findByObjectId(entity.getId()).orElse(null);
+        CompanyAddressEntity address = companyAddressRepository.findByObjectId(entity.getId()).orElse(null);
+
         return companyResponseMapper.map(entity, address);
     }
 
     @Transactional
-    public CompanyResponse create(CompanyCreateRequest company, JwtPayload user) {
+    public CompanyResponse create(@NotNull CompanyCreateRequest company, @NotNull JwtPayload user) {
         UserEntity userEntity = userGetById.execute(user.getId());
         CompanyEntity entity = companyModelMapper.map(company, userEntity);
 
-        this.existsByName(entity.getName());
+        existsByName(entity.getName());
 
         CompanyEntity savedEntity = companyRepository.save(entity);
 
@@ -80,8 +79,8 @@ public class CompanyService {
     }
 
     @Transactional
-    public CompanyResponse update(Long id, CompanyUpdateRequest request, JwtPayload user) {
-        this.existsByName(request.getName());
+    public CompanyResponse update(@NotNull Long id, @NotNull CompanyUpdateRequest request, @NotNull JwtPayload user) {
+        existsByName(request.getName());
 
         UserEntity userEntity = userGetById.execute(user.getId());
         CompanyEntity existingCompany = getEntityById(id);
@@ -90,7 +89,8 @@ public class CompanyService {
             throw new PermissionDeniedException();
         }
 
-        CompanyEntity companyToUpdate = companyModelFactory.make(existingCompany.getId(), request.getName(), userEntity);
+        CompanyEntity companyToUpdate =
+                companyModelFactory.make(existingCompany.getId(), request.getName(), userEntity);
         CompanyEntity savedCompany = companyRepository.save(companyToUpdate);
 
         AddressEntity address = null;
@@ -102,8 +102,8 @@ public class CompanyService {
         return companyResponseMapper.map(savedCompany, address);
     }
 
-    public void delete(Long id, JwtPayload user) {
-        CompanyEntity entity = companyRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException());
+    public void delete(@NotNull Long id, @NotNull JwtPayload user) {
+        CompanyEntity entity = companyRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
 
         if (!entity.getUser().getId().equals(user.getId())) {
             throw new PermissionDeniedException();
@@ -112,13 +112,13 @@ public class CompanyService {
         companyRepository.deleteById(id);
     }
 
-    private void existsByName(String name) {
+    private void existsByName(@NotNull String name) {
         if (companyRepository.existsByName(name)) {
             throw new ObjectAlreadyExistsException();
         }
     }
 
-    private CompanyEntity getEntityById(Long id) {
-        return companyRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException());
+    private CompanyEntity getEntityById(@NotNull Long id) {
+        return companyRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
     }
 }

@@ -10,9 +10,16 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import com.example.user.entity.UserEntity;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "companies")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class CompanyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,28 +31,4 @@ public class CompanyEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
-
-    protected CompanyEntity() {
-        this.id = null;
-        this.name = null;
-        this.user = null;
-    }
-
-    public CompanyEntity(Long id, String name, UserEntity user) {
-        this.id = id;
-        this.name = name;
-        this.user = user;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public UserEntity getUser() {
-        return user;
-    }
 }

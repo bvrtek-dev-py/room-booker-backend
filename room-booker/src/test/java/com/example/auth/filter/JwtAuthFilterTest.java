@@ -1,12 +1,17 @@
 package com.example.auth.filter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,22 +20,23 @@ import com.example.auth.dto.JwtPayload;
 import com.example.auth.factory.UsernamePasswordAuthenticationTokenFactory;
 import com.example.auth.service.AccessTokenService;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 @ExtendWith(MockitoExtension.class)
 class JwtAuthFilterTest {
     @Mock
     private AccessTokenService jwtService;
+
     @Mock
     private UsernamePasswordAuthenticationTokenFactory authenticationTokenFactory;
+
     @Mock
     private HttpServletRequest request;
+
     @Mock
     private HttpServletResponse response;
+
     @Mock
     private FilterChain filterChain;
+
     @InjectMocks
     private JwtAuthFilter filter;
 

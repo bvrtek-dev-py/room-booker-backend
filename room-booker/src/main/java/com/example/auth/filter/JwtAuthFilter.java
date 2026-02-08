@@ -2,12 +2,13 @@ package com.example.auth.filter;
 
 import java.io.IOException;
 
+import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -19,15 +20,14 @@ import com.example.auth.factory.UsernamePasswordAuthenticationTokenFactory;
 import com.example.auth.service.AccessTokenService;
 
 @Component
+@RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
-    @Autowired
-    private AccessTokenService jwtService;
+    private final AccessTokenService jwtService;
 
-    @Autowired
-    private UsernamePasswordAuthenticationTokenFactory authenticationTokenFactory;
+    private final UsernamePasswordAuthenticationTokenFactory authenticationTokenFactory;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+    protected void doFilterInternal(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response, @Nonnull FilterChain chain)
             throws ServletException, IOException {
         final String token = jwtService.extractTokenFromHeader(request);
 

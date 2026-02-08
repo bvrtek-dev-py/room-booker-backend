@@ -1,6 +1,7 @@
 package com.example.address.factory;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,7 +26,7 @@ class AddressEntityFactoryStrategyTest {
 
     @Test
     void testGetCompanyFactory() {
-        // when 
+        // when
         AddressEntityFactory factory = strategy.get(ReferenceType.COMPANY);
 
         // then

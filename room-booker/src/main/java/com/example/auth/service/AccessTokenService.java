@@ -6,16 +6,17 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
 import com.example.auth.dto.JwtPayload;
 import com.example.auth.factory.JwtPayloadFactory;
 
 @Service
+@RequiredArgsConstructor
 public class AccessTokenService extends TokenService {
-    @Autowired
-    private JwtPayloadFactory jwtPayloadFactory;
+    private final JwtPayloadFactory jwtPayloadFactory;
 
     private final String SECRET_KEY = "3q2+7w==3q2+7w==3q2+7w==3q2+7w=="; // @TODO environment variable
     private final long EXPIRATION_TIME_MILLISECONDS = 15 * 60 * 1000; // 15 minut
@@ -32,7 +33,7 @@ public class AccessTokenService extends TokenService {
         return EXPIRATION_TIME_MILLISECONDS;
     }
 
-    public JwtPayload extractPayload(String token) {
+    public JwtPayload extractPayload(@NotNull String token) {
         Claims claims = extractClaims(token);
         Long id = claims.get("id", Long.class);
         String email = claims.getSubject();
@@ -40,12 +41,12 @@ public class AccessTokenService extends TokenService {
         return jwtPayloadFactory.make(id, email);
     }
 
-    public boolean isTokenValid(String token) {
+    public boolean isTokenValid(@NotNull String token) {
         JwtPayload payload = extractPayload(token);
         return payload != null && !isTokenExpired(token);
     }
 
-    public String extractTokenFromHeader(HttpServletRequest request) {
+    public String extractTokenFromHeader(@NotNull HttpServletRequest request) {
         final String authHeader = request.getHeader(AUTHORIZATION);
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
@@ -55,11 +56,11 @@ public class AccessTokenService extends TokenService {
         return null;
     }
 
-    private boolean isTokenExpired(String token) {
+    private boolean isTokenExpired(@NotNull String token) {
         return extractClaims(token).getExpiration().before(new Date());
     }
 
-    private Claims extractClaims(String token) {
+    private Claims extractClaims(@NotNull String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(SECRET_KEY.getBytes())
                 .build()
@@ -67,7 +68,7 @@ public class AccessTokenService extends TokenService {
                 .getBody();
     }
 
-    public Date getExpirationDate(String token) {
+    public Date getExpirationDate(@NotNull String token) {
         return extractClaims(token).getExpiration();
     }
 }

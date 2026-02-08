@@ -42,14 +42,7 @@ class AddressCreateTest {
 
     @BeforeEach
     void setUp() {
-        request = new AddressCreateRequest(
-                "Main St",
-                "New York",
-                "NY",
-                "10001",
-                "USA",
-                ReferenceType.COMPANY
-        );
+        request = new AddressCreateRequest("Main St", "New York", "NY", "10001", "USA", ReferenceType.COMPANY);
 
         entity = new AddressEntity(1L, "Main St", "New York", "NY", "10001", "USA", 42L) {
             @Override

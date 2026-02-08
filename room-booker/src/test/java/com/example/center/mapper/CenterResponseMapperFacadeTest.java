@@ -1,14 +1,15 @@
 package com.example.center.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.BDDMockito.given;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.address.dto.AddressResponse;
@@ -49,7 +50,8 @@ class CenterResponseMapperFacadeTest {
         given(centerEntity.getCompany()).willReturn(companyEntity);
         given(companyResponseMapperFacade.map(companyEntity, null)).willReturn(companyResponse);
         given(addressResponseMapper.map(addressEntity)).willReturn(addressResponse);
-        given(centerResponseMapper.map(centerEntity, companyResponse, addressResponse)).willReturn(expectedResponse);
+        given(centerResponseMapper.map(centerEntity, companyResponse, addressResponse))
+                .willReturn(expectedResponse);
 
         // when
         CenterResponse result = facade.map(centerEntity, addressEntity);

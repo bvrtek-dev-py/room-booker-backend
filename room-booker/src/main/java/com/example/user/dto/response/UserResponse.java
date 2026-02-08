@@ -1,33 +1,23 @@
 package com.example.user.dto.response;
 
 import com.example.user.role.UserRole;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserResponse {
+    @NotNull
     private Long id;
+    @NotBlank
     private String username;
+    @Email
     private String email;
+    @NotNull
     private UserRole role;
-
-    public UserResponse(Long id, String username, String email, UserRole role) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.role = role;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public UserRole getRole() {
-        return role;
-    }
 }

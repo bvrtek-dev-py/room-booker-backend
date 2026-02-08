@@ -1,6 +1,7 @@
 package com.example.auth.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -11,22 +12,19 @@ import com.example.auth.dto.TokenResponse;
 import com.example.auth.factory.TokenResponseFactory;
 
 @Service
+@RequiredArgsConstructor
 public class LoginService {
     private static final String BEARER = "Bearer";
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private AccessTokenService accessTokenService;
+    private final AccessTokenService accessTokenService;
 
-    @Autowired
-    private RefreshTokenService refreshTokenService;
+    private final RefreshTokenService refreshTokenService;
 
-    @Autowired
-    private TokenResponseFactory tokenResponseFactory;
+    private final TokenResponseFactory tokenResponseFactory;
 
-    public TokenResponse login(String email, String password) {
+    public TokenResponse login(@NotNull String email, @NotNull String password) {
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 
@@ -39,6 +37,7 @@ public class LoginService {
                 refreshTokenService.generate(userDetails.getEmail(), userDetails.getId(), currentTimeMillis);
 
         return tokenResponseFactory.create(
-                accessToken, refreshToken, BEARER, accessTokenService.getExpirationDate(accessToken));
+            accessToken, refreshToken, BEARER, accessTokenService.getExpirationDate(accessToken)
+        );
     }
 }

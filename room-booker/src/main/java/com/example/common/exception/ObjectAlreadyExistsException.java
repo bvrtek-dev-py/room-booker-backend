@@ -8,8 +8,4 @@ public class ObjectAlreadyExistsException extends RuntimeException {
     public ObjectAlreadyExistsException() {
         super("Object already exists");
     }
-
-    public ObjectAlreadyExistsException(String message) {
-        super(message);
-    }
 }

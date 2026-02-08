@@ -1,6 +1,5 @@
 package com.example.center.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
 
 import com.example.auth.dto.JwtPayload;
 import com.example.center.dto.request.CenterUpdateRequest;
@@ -18,9 +18,9 @@ import com.example.center.service.CenterService;
 
 @RestController
 @RequestMapping("/api/v1/centers")
+@RequiredArgsConstructor
 public class CenterController {
-    @Autowired
-    private CenterService centerService;
+    private final CenterService centerService;
 
     @GetMapping("/{id}")
     public ResponseEntity<CenterResponse> getById(@PathVariable Long id) {

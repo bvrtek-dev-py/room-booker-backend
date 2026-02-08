@@ -3,8 +3,9 @@ package com.example.apartment.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
 import com.example.apartment.dto.request.ApartmentCreateRequest;
 import com.example.apartment.dto.request.ApartmentUpdateRequest;
@@ -20,20 +21,17 @@ import com.example.common.exception.ObjectNotFoundException;
 import com.example.common.exception.PermissionDeniedException;
 
 @Service
+@RequiredArgsConstructor
 public class ApartmentService {
-    @Autowired
-    private ApartmentRepository apartmentRepository;
+    private final ApartmentRepository apartmentRepository;
 
-    @Autowired
-    private ApartmentEntityMapper apartmentEntityMapper;
+    private final ApartmentEntityMapper apartmentEntityMapper;
 
-    @Autowired
-    private CenterGetIfBelongsToUser centerGetIfBelongsToUser;
+    private final CenterGetIfBelongsToUser centerGetIfBelongsToUser;
 
-    @Autowired
-    private ApartmentResponseMapperFacade apartmentResponseMapperFacade;
+    private final ApartmentResponseMapperFacade apartmentResponseMapperFacade;
 
-    public ApartmentResponse create(ApartmentCreateRequest request, Long centerId, JwtPayload jwtPayload) {
+    public ApartmentResponse create(@NotNull ApartmentCreateRequest request, @NotNull Long centerId, @NotNull JwtPayload jwtPayload) {
         CenterEntity center = centerGetIfBelongsToUser.execute(centerId, jwtPayload.getId());
 
         ApartmentEntity apartment = apartmentEntityMapper.map(request, center);
@@ -42,7 +40,7 @@ public class ApartmentService {
         return apartmentResponseMapperFacade.map(savedApartment);
     }
 
-    public ApartmentResponse update(Long id, ApartmentUpdateRequest request, Long userId) {
+    public ApartmentResponse update(@NotNull Long id, @NotNull ApartmentUpdateRequest request, @NotNull Long userId) {
         ApartmentEntity existingApartment = getEntityById(id);
         throwIfNotApartmentOwner(existingApartment, userId);
 
@@ -54,20 +52,19 @@ public class ApartmentService {
                 request.getPricePerNight(),
                 request.getAmount(),
                 request.getFacilities(),
-                null
-            );
+                null);
         ApartmentEntity updatedApartment = apartmentRepository.save(apartment);
 
         return apartmentResponseMapperFacade.map(updatedApartment);
     }
 
-    public ApartmentResponse getById(Long id) {
+    public ApartmentResponse getById(@NotNull Long id) {
         ApartmentEntity apartment = getEntityById(id);
 
         return apartmentResponseMapperFacade.map(apartment);
     }
 
-    public List<ApartmentResponse> getByCenterId(Long centerId, Long userId) {
+    public List<ApartmentResponse> getByCenterId(@NotNull Long centerId, @NotNull Long userId) {
         CenterEntity center = centerGetIfBelongsToUser.execute(centerId, userId);
 
         return apartmentRepository.findByCenter(center).stream()
@@ -75,17 +72,17 @@ public class ApartmentService {
                 .collect(Collectors.toList());
     }
 
-    public void delete(Long id, Long userId) {
+    public void delete(@NotNull Long id, @NotNull Long userId) {
         centerGetIfBelongsToUser.execute(getEntityById(id).getCenter().getId(), userId);
 
         apartmentRepository.deleteById(id);
     }
 
-    private ApartmentEntity getEntityById(Long id) {
-        return apartmentRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException());
+    private ApartmentEntity getEntityById(@NotNull Long id) {
+        return apartmentRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
     }
 
-    private void throwIfNotApartmentOwner(ApartmentEntity apartment, Long userId) {
+    private void throwIfNotApartmentOwner(@NotNull ApartmentEntity apartment, @NotNull Long userId) {
         if (!apartment.getCenter().getCompany().getUser().getId().equals(userId)) {
             throw new PermissionDeniedException();
         }

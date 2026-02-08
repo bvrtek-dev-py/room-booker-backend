@@ -1,39 +1,19 @@
 package com.example.center.dto.request;
 
 import com.example.address.dto.AddressCreateRequest;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
+@Data
+@AllArgsConstructor
 public class CenterUpdateRequest {
+    @NotBlank(message = "Name is required")
     private String name;
+
+    @NotBlank(message = "Description is required")
     private String description;
+
+    @NotBlank(message = "Address is required")
     private AddressCreateRequest address;
-
-    public CenterUpdateRequest(String name, String description, AddressCreateRequest address) {
-        this.name = name;
-        this.description = description;
-        this.address = address;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public AddressCreateRequest getAddress() {
-        return address;
-    }
-
-    public void setAddress(AddressCreateRequest address) {
-        this.address = address;
-    }
 }

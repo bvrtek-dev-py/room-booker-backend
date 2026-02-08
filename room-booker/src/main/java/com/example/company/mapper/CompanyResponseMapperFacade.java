@@ -1,8 +1,9 @@
 package com.example.company.mapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
 
 import com.example.address.entity.AddressEntity;
 import com.example.address.mapper.AddressResponseMapper;
@@ -11,17 +12,15 @@ import com.example.company.entity.CompanyEntity;
 import com.example.user.mapper.UserResponseMapper;
 
 @Component
+@RequiredArgsConstructor
 public class CompanyResponseMapperFacade {
-    @Autowired
-    private CompanyResponseMapper companyResponseMapper;
+    private final CompanyResponseMapper companyResponseMapper;
 
-    @Autowired
-    private UserResponseMapper userResponseMapper;
+    private final UserResponseMapper userResponseMapper;
 
-    @Autowired
-    private AddressResponseMapper addressResponseMapper;
+    private final AddressResponseMapper addressResponseMapper;
 
-    public CompanyResponse map(CompanyEntity entity, @Nullable AddressEntity address) {
+    public CompanyResponse map(@NotNull CompanyEntity entity, @Nullable AddressEntity address) {
         return companyResponseMapper.map(
             entity,
             userResponseMapper.map(entity.getUser()),

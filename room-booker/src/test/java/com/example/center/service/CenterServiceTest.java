@@ -43,56 +43,70 @@ import com.example.user.role.UserRole;
 @ExtendWith(MockitoExtension.class)
 class CenterServiceTest {
 
-    @Mock private CenterRepository centerRepository;
-    @Mock private CenterEntityMapper centerEntityMapper;
-    @Mock private CenterResponseMapperFacade centerResponseMapperFacade;
-    @Mock private CompanyGetIfUserIsOwner companyGetIfUserIsOwner;
-    @Mock private CompanyGetById companyGetById;
-    @Mock private CenterGetById centerGetById;
-    @Mock private AddressCreate addressCreate;
-    @Mock private CenterAddressRepository centerAddressRepository;
-    @Mock private AddressUpdate addressUpdate;
+    @Mock
+    private CenterRepository centerRepository;
 
-    @InjectMocks private CenterService centerService;
+    @Mock
+    private CenterEntityMapper centerEntityMapper;
+
+    @Mock
+    private CenterResponseMapperFacade centerResponseMapperFacade;
+
+    @Mock
+    private CompanyGetIfUserIsOwner companyGetIfUserIsOwner;
+
+    @Mock
+    private CompanyGetById companyGetById;
+
+    @Mock
+    private CenterGetById centerGetById;
+
+    @Mock
+    private AddressCreate addressCreate;
+
+    @Mock
+    private CenterAddressRepository centerAddressRepository;
+
+    @Mock
+    private AddressUpdate addressUpdate;
+
+    @InjectMocks
+    private CenterService centerService;
 
     @Test
     void shouldCreateCenter() {
         // given
         JwtPayload user = new JwtPayload(10L, "john@doe.com");
-    
-        AddressCreateRequest addrReq = new AddressCreateRequest(
-            "Main Street", "Springfield", "IL", "12345", "USA", ReferenceType.CENTER
-        );
-    
-        CenterCreateRequest request = new CenterCreateRequest(
-            "My Center", "Desc", addrReq
-        );
-    
+
+        AddressCreateRequest addrReq =
+                new AddressCreateRequest("Main Street", "Springfield", "IL", "12345", "USA", ReferenceType.CENTER);
+
+        CenterCreateRequest request = new CenterCreateRequest("My Center", "Desc", addrReq);
+
         UserEntity owner = new UserEntity(10L, "john", "pwd", "john@doe.com", UserRole.USER);
         CompanyEntity company = new CompanyEntity(5L, "Company", owner);
-    
+
         given(companyGetIfUserIsOwner.execute(5L, 10L)).willReturn(company);
         given(centerRepository.existsByName("My Center")).willReturn(false);
-    
+
         CenterEntity mapped = new CenterEntity(null, "My Center", "Desc", company);
         given(centerEntityMapper.map(request, company)).willReturn(mapped);
-    
+
         CenterEntity persisted = new CenterEntity(99L, "My Center", "Desc", company);
         given(centerRepository.save(mapped)).willReturn(persisted);
-    
+
         AddressEntity address = mock(AddressEntity.class);
         given(addressCreate.execute(addrReq, 99L)).willReturn(address);
-    
+
         CenterResponse expectedResponse = new CenterResponse(99L, "My Center", "Desc", null, null);
         given(centerResponseMapperFacade.map(persisted, address)).willReturn(expectedResponse);
-    
+
         // when
         CenterResponse result = centerService.create(request, 5L, user);
-    
+
         // then
         assertThat(result).isEqualTo(expectedResponse);
     }
-    
 
     @Test
     void shouldThrowWhenNameExistsOnCreate() {
@@ -150,8 +164,7 @@ class CenterServiceTest {
         given(centerGetById.execute(7L)).willReturn(existing);
 
         // when + then
-        assertThatThrownBy(() -> centerService.update(7L, request, 99L))
-                .isInstanceOf(PermissionDeniedException.class);
+        assertThatThrownBy(() -> centerService.update(7L, request, 99L)).isInstanceOf(PermissionDeniedException.class);
     }
 
     @Test
@@ -224,7 +237,6 @@ class CenterServiceTest {
         given(centerGetById.execute(7L)).willReturn(center);
 
         // when + then
-        assertThatThrownBy(() -> centerService.delete(7L, 99L))
-                .isInstanceOf(PermissionDeniedException.class);
+        assertThatThrownBy(() -> centerService.delete(7L, 99L)).isInstanceOf(PermissionDeniedException.class);
     }
 }

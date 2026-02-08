@@ -67,8 +67,8 @@ class CompanyServiceTest {
         JwtPayload userPayload = new JwtPayload(10L, "john@doe.com");
         UserEntity userEntity = new UserEntity(10L, "john", "pwd", "john@doe.com", UserRole.USER);
 
-        AddressCreateRequest addressRequest = new AddressCreateRequest(
-                "Street 1", "City", "State", "12345", "Country", ReferenceType.COMPANY);
+        AddressCreateRequest addressRequest =
+                new AddressCreateRequest("Street 1", "City", "State", "12345", "Country", ReferenceType.COMPANY);
 
         CompanyCreateRequest companyRequest = new CompanyCreateRequest("My Company", addressRequest);
 
@@ -98,8 +98,8 @@ class CompanyServiceTest {
         JwtPayload userPayload = new JwtPayload(10L, "john@doe.com");
         UserEntity userEntity = new UserEntity(10L, "john", "pwd", "john@doe.com", UserRole.USER);
 
-        AddressCreateRequest addressRequest = new AddressCreateRequest(
-                "Street 1", "City", "State", "12345", "Country", ReferenceType.COMPANY);
+        AddressCreateRequest addressRequest =
+                new AddressCreateRequest("Street 1", "City", "State", "12345", "Country", ReferenceType.COMPANY);
 
         CompanyUpdateRequest updateRequest = new CompanyUpdateRequest("Updated Company", addressRequest);
 

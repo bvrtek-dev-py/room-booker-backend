@@ -1,7 +1,5 @@
 package com.example.center.entity;
 
-import com.example.company.entity.CompanyEntity;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,8 +9,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import com.example.company.entity.CompanyEntity;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "centers")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class CenterEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,37 +35,7 @@ public class CenterEntity {
     @JoinColumn(name = "company_id", nullable = false)
     private CompanyEntity company;
 
-    protected CenterEntity() {}
-
-    public CenterEntity(Long id, String name, String description, CompanyEntity company) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.company = company;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public CompanyEntity getCompany() {
-        return company;
-    }
-
-    public CenterEntity with(
-        Long id,
-        String name,
-        String description,
-        CompanyEntity company
-    ) {
+    public CenterEntity with(Long id, String name, String description, CompanyEntity company) {
         CenterEntity newCenter = new CenterEntity();
 
         newCenter.id = (id != null) ? id : this.id;

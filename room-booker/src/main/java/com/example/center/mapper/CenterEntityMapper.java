@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import com.example.center.dto.request.CenterCreateRequest;
-import com.example.center.entity.CenterEntity; 
+import com.example.center.entity.CenterEntity;
 import com.example.company.entity.CompanyEntity;
 
 @Mapper(componentModel = "spring")
