@@ -1,3 +1,19 @@
 package com.example.center.dto.request;
 
-public class CenterUpdateRequest extends CenterBaseRequest {}
+import com.example.address.dto.AddressCreateRequest;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
+public class CenterUpdateRequest {
+    @NotBlank(message = "Name is required")
+    private String name;
+
+    @NotBlank(message = "Description is required")
+    private String description;
+
+    @NotBlank(message = "Address is required")
+    private AddressCreateRequest address;
+}
